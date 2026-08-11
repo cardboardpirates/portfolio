@@ -4,7 +4,7 @@ const LINKEDIN_URL =
   "https://www.linkedin.com/in/pedro-di-mambro-visnardi-064075145";
 const GITHUB_URL = "https://github.com/cardboardpirates";
 const EMAIL = "visnardi.pedro@gmail.com";
-const RESUME_URL = "/resume.pdf";
+const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
 
 const en: SiteContent = {
   meta: {
