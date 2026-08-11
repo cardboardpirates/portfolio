@@ -26,8 +26,8 @@ export function GradientBackground({ variant }: GradientBackgroundProps) {
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 20, mass: 0.6 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 20, mass: 0.6 });
+  const springX = useSpring(mouseX, { stiffness: 90, damping: 16, mass: 0.4 });
+  const springY = useSpring(mouseY, { stiffness: 90, damping: 16, mass: 0.4 });
 
   useEffect(() => {
     if (!isHero || reduceMotion) return;
@@ -41,10 +41,10 @@ export function GradientBackground({ variant }: GradientBackgroundProps) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isHero, reduceMotion, mouseX, mouseY]);
 
-  const blob1X = useTransform(springX, [-1, 1], [-30, 30]);
-  const blob1Y = useTransform(springY, [-1, 1], [-22, 22]);
-  const blob2X = useTransform(springX, [-1, 1], [22, -22]);
-  const blob2Y = useTransform(springY, [-1, 1], [18, -18]);
+  const blob1X = useTransform(springX, [-1, 1], [-110, 110]);
+  const blob1Y = useTransform(springY, [-1, 1], [-80, 80]);
+  const blob2X = useTransform(springX, [-1, 1], [90, -90]);
+  const blob2Y = useTransform(springY, [-1, 1], [65, -65]);
 
   return (
     <div
@@ -57,7 +57,7 @@ export function GradientBackground({ variant }: GradientBackgroundProps) {
       >
         <motion.div
           className="absolute -left-[10%] -top-[10%] h-[70%] w-[70%] rounded-full blur-[110px]"
-          style={{ backgroundColor: "#4E85BF", opacity: 0.35 }}
+          style={{ backgroundColor: "#4E85BF", opacity: isHero ? 0.45 : 0.35 }}
           animate={
             reduceMotion
               ? undefined
@@ -76,7 +76,7 @@ export function GradientBackground({ variant }: GradientBackgroundProps) {
       >
         <motion.div
           className="absolute -right-[10%] -bottom-[10%] h-[60%] w-[60%] rounded-full blur-[110px]"
-          style={{ backgroundColor: "#89AACC", opacity: 0.3 }}
+          style={{ backgroundColor: "#89AACC", opacity: isHero ? 0.4 : 0.3 }}
           animate={
             reduceMotion
               ? undefined
