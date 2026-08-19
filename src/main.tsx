@@ -2,14 +2,11 @@
 // O Vite injeta este script no index.html e é aqui que o React "toma posse" da página.
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-// Cada import abaixo carrega um arquivo CSS com um peso (weight) da fonte Inter.
 // Importar CSS direto em um arquivo .tsx é um recurso do Vite/bundler: ele identifica
 // o import e injeta o CSS na página no build final.
-import '@fontsource/inter/300.css'
-import '@fontsource/inter/400.css'
-import '@fontsource/inter/500.css'
-import '@fontsource/inter/600.css'
-import '@fontsource/inter/700.css'
+// Roboto Flex é uma fonte variável: um único arquivo cobre todo o eixo de peso
+// (100 a 1000), então não precisa de um import por peso como a Inter tinha.
+import '@fontsource-variable/roboto-flex'
 import '@fontsource/pirata-one/400.css'
 import './index.css'
 import App from './App.tsx'
