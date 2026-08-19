@@ -3,6 +3,9 @@ import { useEffect, useRef } from "react";
 import { useLoadingProgress } from "../../hooks/useLoadingProgress";
 import { useRotatingWords } from "../../hooks/useRotatingWords";
 
+// "onComplete" é um exemplo do padrão "callback prop": o componente pai (App.tsx)
+// passa uma função, e este componente a chama quando termina, sem precisar saber
+// o que o pai faz com essa informação (aqui, o pai esconde a tela de loading).
 interface LoadingScreenProps {
   label: string;
   words: string[];
@@ -14,13 +17,19 @@ export function LoadingScreen({
   words,
   onComplete,
 }: LoadingScreenProps) {
+  // Reaproveita dois hooks customizados: um para a barra de progresso (0 a 100)
+  // e outro para alternar as palavras exibidas (ex: "Design", "Build", "Ship").
   const progress = useLoadingProgress(2700);
   const { word, index } = useRotatingWords(words, 900);
+  // Flag para garantir que onComplete só seja chamado uma vez, mesmo que este
+  // efeito rode de novo (por exemplo, no StrictMode do React em desenvolvimento).
   const hasCompleted = useRef(false);
 
   useEffect(() => {
     if (progress >= 100 && !hasCompleted.current) {
       hasCompleted.current = true;
+      // Espera 400ms depois de chegar a 100% antes de avisar o pai, dando
+      // tempo do número "100" aparecer na tela antes da transição de saída.
       const timeout = setTimeout(onComplete, 400);
       return () => clearTimeout(timeout);
     }
@@ -42,6 +51,10 @@ export function LoadingScreen({
       </motion.span>
 
       <div className="flex flex-1 items-center justify-center">
+        {/* Trocar a "key" de um elemento (aqui, key={index}) faz o React tratá-lo
+            como um elemento NOVO em vez de atualizar o existente. Combinado com
+            AnimatePresence, isso dispara a animação de saída (exit) da palavra
+            antiga e a animação de entrada (initial/animate) da palavra nova. */}
         <AnimatePresence mode="wait">
           <motion.span
             key={index}

@@ -1,11 +1,17 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
+// Componente reutilizável: SelectedWork, Explorations e Stats usam o mesmo
+// "cabeçalho de seção" (eyebrow + título + subtexto), só trocando o conteúdo.
+// Isso evita repetir a mesma estrutura JSX em três lugares diferentes.
 interface SectionHeaderProps {
   eyebrow: string;
   heading: string;
   headingItalic: string;
   subtext?: string;
+  // "action" permite que quem usa este componente injete um elemento extra
+  // (ex: um botão) no canto do cabeçalho, sem o SectionHeader precisar saber
+  // o que é esse elemento. Isso é o padrão de "slot"/"children" no React.
   action?: ReactNode;
 }
 
@@ -18,8 +24,14 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <motion.div
+      // Animação de entrada ao rolar a página: começa invisível e 30px abaixo,
+      // e anima até opacidade 1 e posição normal quando entra na viewport.
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
+      // "once: true" faz a animação rodar só na primeira vez que aparece na tela
+      // (não repete toda vez que o usuário rola pra cima e pra baixo).
+      // "margin: -100px" antecipa o disparo, começando um pouco antes do
+      // elemento entrar de fato na área visível.
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
       className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"

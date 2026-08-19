@@ -9,7 +9,11 @@ interface ContactProps {
 }
 
 export function Contact({ content }: ContactProps) {
+  // ref para o elemento que contém o texto repetido do "marquee" (faixa que
+  // desliza continuamente), animado via GSAP mais abaixo.
   const trackRef = useRef<HTMLDivElement>(null);
+  // Desestruturação: extrai só as chaves "contact" e "social" do objeto
+  // "content", equivalente a "content.contact" e "content.social".
   const { contact, social } = content;
   const emailHref =
     social.find((link) => link.href.startsWith("mailto:"))?.href ?? "#";
@@ -17,6 +21,10 @@ export function Contact({ content }: ContactProps) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!trackRef.current) return;
+      // Anima o elemento de -0% até -50% da sua própria largura no eixo X,
+      // continuamente (repeat: -1 significa "repetir para sempre" no GSAP).
+      // Como o conteúdo é duplicado duas vezes (veja o .map([0, 1]) no JSX),
+      // mover exatamente 50% cria um loop perfeito e sem "salto" visível.
       gsap.to(trackRef.current, {
         xPercent: -50,
         duration: 40,
@@ -55,6 +63,10 @@ export function Contact({ content }: ContactProps) {
         </div>
 
         <div className="my-16 overflow-hidden md:my-20">
+          {/* [0, 1].map duplica o texto do marquee lado a lado. Isso é o que
+              permite o loop contínuo: quando a animação GSAP move a faixa em
+              -50%, a segunda cópia do texto "assume o lugar" da primeira sem
+              deixar espaço vazio aparecer. */}
           <div ref={trackRef} className="flex w-max whitespace-nowrap">
             {[0, 1].map((i) => (
               <span

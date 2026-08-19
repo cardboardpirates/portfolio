@@ -6,6 +6,12 @@ interface StatsProps {
   content: SiteContent;
 }
 
+// Sub-componente interno, usado só dentro deste arquivo (não é exportado).
+// Extraído porque cada estatística (9+ anos, 4 empregadores...) precisa do
+// seu PRÓPRIO hook useCountUp e do seu próprio ref: um hook não pode ser
+// chamado dentro de um .map diretamente, então cada item vira seu componente.
+// A prop é tipada inline aqui ({ stat: StatContent }) por ser usada só neste
+// lugar, sem necessidade de uma interface separada.
 function StatItem({ stat }: { stat: StatContent }) {
   const { value, ref } = useCountUp<HTMLDivElement>(stat.value);
   return (

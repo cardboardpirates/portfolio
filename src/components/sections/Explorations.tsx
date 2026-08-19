@@ -6,6 +6,7 @@ interface ExplorationsProps {
   content: SiteContent;
 }
 
+// Lista fixa de gradientes CSS usados nos "tiles" decorativos das duas colunas.
 const TILE_GRADIENTS = [
   "linear-gradient(135deg, #89AACC, #4E85BF)",
   "linear-gradient(135deg, #4E85BF, #26314a)",
@@ -16,6 +17,9 @@ const TILE_GRADIENTS = [
 ];
 
 export function Explorations({ content }: ExplorationsProps) {
+  // Quatro refs: a section inteira (usada como área de scroll/trigger),
+  // o bloco que fica "grudado" na tela (pin) e as duas colunas de tiles
+  // que se movem em velocidades diferentes (efeito parallax).
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const colARef = useRef<HTMLDivElement>(null);
@@ -25,6 +29,11 @@ export function Explorations({ content }: ExplorationsProps) {
     const ctx = gsap.context(() => {
       if (!sectionRef.current || !pinRef.current) return;
 
+      // ScrollTrigger.create com "pin" faz o elemento "pinRef" ficar fixo
+      // na tela (como position: sticky, mas mais controlável) enquanto o
+      // usuário rola do topo ("top top") até o fim ("bottom bottom") da
+      // section, que tem 300vh de altura (veja min-h-[300vh] no JSX abaixo)
+      // justamente para dar espaço de scroll suficiente para esse efeito.
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -33,6 +42,10 @@ export function Explorations({ content }: ExplorationsProps) {
         pinSpacing: false,
       });
 
+      // Configuração de scroll compartilhada pelas duas colunas.
+      // "scrub: true" liga o progresso da animação direto ao progresso do
+      // scroll (em vez de tocar automaticamente, ela "escrubra" para frente
+      // e para trás conforme o usuário rola).
       const scrollConfig = {
         trigger: sectionRef.current,
         start: "top bottom",
@@ -40,6 +53,8 @@ export function Explorations({ content }: ExplorationsProps) {
         scrub: true,
       };
 
+      // As duas colunas se movem em direções opostas no eixo Y (uma sobe,
+      // outra desce) enquanto o usuário rola, criando profundidade visual.
       if (colARef.current) {
         gsap.to(colARef.current, {
           yPercent: -15,
@@ -60,6 +75,8 @@ export function Explorations({ content }: ExplorationsProps) {
     return () => ctx.revert();
   }, []);
 
+  // .slice(0, 3) e .slice(3) dividem a lista de 6 gradientes em dois grupos
+  // de 3, um para cada coluna, sem duplicar dados.
   const columnA = TILE_GRADIENTS.slice(0, 3);
   const columnB = TILE_GRADIENTS.slice(3);
 

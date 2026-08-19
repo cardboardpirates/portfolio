@@ -1,11 +1,25 @@
+// Este arquivo guarda TODO o texto visível do site, em inglês e português,
+// separado do código dos componentes. Essa separação (conteúdo x apresentação)
+// é o que torna o site "bilíngue": os componentes só leem "content[language]"
+// e nunca têm texto embutido diretamente no JSX.
+//
+// "import type" importa só os TIPOS (Language, SiteContent), não valores.
+// Isso deixa claro pro leitor (e pro bundler) que nada em tempo de execução
+// está sendo trazido daqui, só as definições usadas pelo TypeScript.
 import type { Language, SiteContent } from "./types";
 
 const LINKEDIN_URL =
   "https://www.linkedin.com/in/pedro-di-mambro-visnardi-064075145";
 const GITHUB_URL = "https://github.com/cardboardpirates";
 const EMAIL = "visnardi.pedro@gmail.com";
+// import.meta.env.BASE_URL vem da configuração "base" do vite.config.ts (/portfolio/).
+// Usar essa variável em vez de escrever "/portfolio/" na mão garante que os links
+// para arquivos estáticos (como o PDF do currículo) continuem certos se o "base" mudar.
 const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
 
+// "en: SiteContent" diz ao TypeScript para checar este objeto contra a interface
+// SiteContent (definida em types.ts). Se faltar uma propriedade obrigatória ou o tipo
+// estiver errado, o compilador acusa erro aqui mesmo, antes de rodar o site.
 const en: SiteContent = {
   meta: {
     title: "Pedro Visnardi: Frontend Developer & UI Specialist",
@@ -176,4 +190,9 @@ const pt: SiteContent = {
   ],
 };
 
+// Record<Language, SiteContent> é um tipo genérico: significa "um objeto cujas
+// chaves são valores do tipo Language ('en' | 'pt') e cujos valores são do tipo
+// SiteContent". Isso garante, em tempo de compilação, que "content" sempre tem
+// uma entrada para cada idioma, sem esquecer nenhum.
+// É este objeto que App.tsx usa como "content[language]" para pegar o texto certo.
 export const content: Record<Language, SiteContent> = { en, pt };

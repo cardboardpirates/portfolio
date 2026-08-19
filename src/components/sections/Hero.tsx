@@ -9,7 +9,10 @@ interface HeroProps {
 }
 
 export function Hero({ content }: HeroProps) {
+  // ref conectado à section principal (via JSX abaixo), usado como "escopo"
+  // para o gsap.context procurar elementos só dentro desta seção.
   const rootRef = useRef<HTMLDivElement>(null);
+  // Alterna a palavra da "role" (Designer, Developer...) a cada 2 segundos.
   const { word: role, index: roleIndex } = useRotatingWords(
     content.hero.roles,
     2000,
@@ -19,13 +22,28 @@ export function Hero({ content }: HeroProps) {
     "#";
 
   useEffect(() => {
+    // gsap.context agrupa animações e permite limpar todas de uma vez no
+    // cleanup (ctx.revert()), evitando vazamento de listeners/timelines se
+    // este componente desmontar. O segundo argumento (rootRef) restringe as
+    // buscas por seletor CSS (".name-reveal", ".blur-in") a dentro desta seção.
     const ctx = gsap.context(() => {
+      // Uma timeline encadeia animações em sequência. "defaults" aplica a
+      // mesma curva de easing a todas as animações da timeline.
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      // .fromTo(seletor, estadoInicial, estadoFinal): anima o(s) elemento(s)
+      // que casam com a classe ".name-reveal" (o <h1> do nome) do estado
+      // inicial (invisível, 50px abaixo) até o final (visível, no lugar).
       tl.fromTo(
         ".name-reveal",
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1.2, delay: 0.1 },
       ).fromTo(
+        // Encadeado com .fromTo novamente: anima todos os elementos com a
+        // classe ".blur-in" (eyebrow, parágrafos, botões) com um efeito de
+        // desfoque. "stagger: 0.1" atrasa cada elemento em 0.1s um do outro,
+        // criando um efeito cascata em vez de todos aparecerem juntos.
+        // O "0.3" no final é a posição na timeline (começa aos 0.3s, sobrepondo
+        // parte da animação anterior em vez de esperar ela terminar).
         ".blur-in",
         { opacity: 0, filter: "blur(10px)", y: 20 },
         { opacity: 1, filter: "blur(0px)", y: 0, duration: 1, stagger: 0.1 },
@@ -54,6 +72,9 @@ export function Hero({ content }: HeroProps) {
 
         <p className="blur-in mb-8 text-lg text-muted md:text-xl">
           {content.hero.roleIntro}{" "}
+          {/* Trocar "key" a cada nova palavra força o React a recriar este
+              elemento (em vez de só atualizar o texto), o que reinicia a
+              animação CSS "animate-role-fade-in" do zero a cada troca. */}
           <span
             key={roleIndex}
             className="inline-block animate-role-fade-in font-display text-text-primary"

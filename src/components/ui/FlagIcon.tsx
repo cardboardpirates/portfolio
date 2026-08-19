@@ -1,7 +1,14 @@
+// Ícones de bandeira desenhados diretamente em SVG (sem carregar imagens externas),
+// usados pelo botão de trocar idioma (LanguageToggle).
+
+// "Props" é o nome convencional para o tipo dos parâmetros de um componente React
+// (dados que o componente PAI passa para o componente FILHO).
 interface FlagIconProps {
   className?: string;
 }
 
+// "{ className = "" }: FlagIconProps" é desestruturação de objeto com valor padrão:
+// pega a propriedade "className" das props e, se não for passada, usa string vazia.
 export function BrFlagIcon({ className = "" }: FlagIconProps) {
   return (
     <svg
@@ -22,6 +29,9 @@ export function BrFlagIcon({ className = "" }: FlagIconProps) {
   );
 }
 
+// Mesmo padrão do componente acima, agora para a bandeira dos EUA.
+// Dois componentes separados em vez de um genérico "FlagIcon" porque cada
+// bandeira tem uma geometria SVG totalmente diferente.
 export function UsFlagIcon({ className = "" }: FlagIconProps) {
   return (
     <svg

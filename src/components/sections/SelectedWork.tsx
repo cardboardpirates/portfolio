@@ -8,6 +8,8 @@ interface SelectedWorkProps {
 }
 
 export function SelectedWork({ content }: SelectedWorkProps) {
+  // Este componente não tem estado nem efeitos: é um componente "puro" de
+  // apresentação, só monta o layout a partir das props recebidas.
   const { work } = content;
 
   return (
@@ -48,6 +50,9 @@ export function SelectedWork({ content }: SelectedWorkProps) {
                 {work.panelBody}
               </p>
               <div className="mt-2 flex flex-wrap gap-3">
+                {/* Renderiza um GradientBorderLink para cada item de
+                    work.panelLinks (Currículo, LinkedIn, GitHub), reaproveitando
+                    o componente de botão de link definido em ui/GradientBorderLink. */}
                 {work.panelLinks.map((link) => (
                   <GradientBorderLink
                     key={link.href}
