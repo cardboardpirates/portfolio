@@ -25,7 +25,7 @@ export default {
       // Define famílias de fonte customizadas: font-body e font-display.
       fontFamily: {
         body: ["Inter", "sans-serif"],
-        display: ["Manufacturing Consent", "serif"],
+        display: ["Pirata One", "serif"],
       },
       // keyframes descreve os estágios de cada animação CSS (igual ao @keyframes do CSS puro).
       keyframes: {
