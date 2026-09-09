@@ -75,10 +75,10 @@ export function LoadingScreen({
         </span>
         <div className="h-[3px] w-full bg-stroke/50">
           <div
-            className="accent-gradient h-full origin-left"
+            className="h-full origin-left bg-arcane-purple"
             style={{
               transform: `scaleX(${progress / 100})`,
-              boxShadow: "0 0 8px rgba(137, 170, 204, 0.35)",
+              boxShadow: "0 0 8px hsl(var(--arcane-purple) / 0.55)",
             }}
           />
         </div>

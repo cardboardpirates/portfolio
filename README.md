@@ -1,4 +1,4 @@
-# Pedro Visnardi — Portfolio
+# Pedro Visnardi - Portfolio
 
 Personal portfolio site for Pedro Visnardi, Frontend Developer & UI Specialist based in São Paulo, Brazil.
 
@@ -6,7 +6,7 @@ Personal portfolio site for Pedro Visnardi, Frontend Developer & UI Specialist b
 
 - [Vite](https://vite.dev/) + [React](https://react.dev/) + TypeScript
 - [Tailwind CSS](https://tailwindcss.com/)
-- [GSAP](https://gsap.com/) + [Framer Motion](https://motion.dev/) for animation
+- [Framer Motion](https://motion.dev/) for animation
 - English/Portuguese language toggle
 
 ## Development

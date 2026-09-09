@@ -1,0 +1,85 @@
+import { Calendar, GraduationCap, Hourglass, ScrollText } from "lucide-react";
+import type { SiteContent } from "../../lib/types";
+import { QuestLogEntry } from "../ui/QuestLogEntry";
+import { SealedQuestPanel } from "../ui/SealedQuestPanel";
+import { SheetHeading } from "../ui/SheetHeading";
+import { SheetPanel } from "../ui/SheetPanel";
+
+interface QuestLogPageProps {
+  content: SiteContent;
+}
+
+// Página II: bio narrativa, o histórico profissional real como "diário de
+// missões", formação/treinamento, e o card de missão selada (trabalhos
+// ainda não publicados, sem inventar projetos).
+export function QuestLogPage({ content }: QuestLogPageProps) {
+  const { log } = content;
+
+  return (
+    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col gap-10 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 lg:px-16 lg:pr-28">
+      <SheetHeading
+        eyebrow={log.eyebrow}
+        heading={log.heading}
+        headingItalic={log.headingItalic}
+        subtext={log.bio}
+      />
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+        <div className="flex flex-col gap-4 md:col-span-8">
+          <div className="flex items-center gap-1.5 text-[0.65rem] uppercase tracking-[0.25em] text-muted">
+            <ScrollText size={13} className="shrink-0" />
+            {log.questsLabel}
+          </div>
+          {log.quests.map((quest) => (
+            <QuestLogEntry
+              key={quest.id}
+              quest={quest}
+              activeLabel={log.activeQuestLabel}
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-4 md:col-span-4">
+          <div className="flex items-center gap-1.5 text-[0.65rem] uppercase tracking-[0.25em] text-muted">
+            <GraduationCap size={13} className="shrink-0" />
+            {log.trainingLabel}
+          </div>
+          {log.training.map((entry) => (
+            <SheetPanel
+              key={entry.id}
+              tone={entry.status === "incomplete" ? "amber" : "neutral"}
+              label={entry.period}
+              labelIcon={Calendar}
+              className="flex flex-col gap-1 p-5 pt-7"
+            >
+              <div className="flex items-center gap-2">
+                {entry.status === "incomplete" ? (
+                  <Hourglass size={16} className="shrink-0 text-arcane-amber" />
+                ) : (
+                  <GraduationCap size={16} className="shrink-0 text-muted" />
+                )}
+                <h3 className="font-display text-lg text-text-primary">
+                  {entry.institution}
+                </h3>
+              </div>
+              <p className="text-sm text-muted">{entry.program}</p>
+              {entry.status === "incomplete" && (
+                <span className="mt-1 flex w-fit items-center gap-1.5 rounded-sm border border-arcane-amber/40 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.2em] text-arcane-amber">
+                  <Hourglass size={10} />
+                  {log.incompleteTrainingLabel}
+                </span>
+              )}
+            </SheetPanel>
+          ))}
+
+          <SealedQuestPanel
+            eyebrow={log.sealedQuest.eyebrow}
+            title={log.sealedQuest.title}
+            body={log.sealedQuest.body}
+            links={log.sealedQuest.links}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
