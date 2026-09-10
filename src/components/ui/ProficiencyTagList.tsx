@@ -31,11 +31,11 @@ export function ProficiencyTagList({
               <CategoryIcon size={12} className="shrink-0" />
               {groupLabels[category]}
             </div>
-            <ul className="flex flex-col">
+            <ul className="flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <li
                   key={tag.label}
-                  className="flex items-center gap-2 border-b border-stroke/40 py-1 text-sm text-text-primary/90 last:border-b-0"
+                  className="flex items-center gap-1.5 rounded-sm border border-stroke/50 bg-bg/40 px-2.5 py-1 text-sm text-text-primary/90"
                 >
                   <Check size={13} className="shrink-0 text-arcane-teal/80" />
                   {tag.label}

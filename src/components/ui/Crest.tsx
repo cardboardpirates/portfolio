@@ -4,9 +4,14 @@
 interface CrestProps {
   alt: string;
   size?: number;
+  src?: string;
 }
 
-export function Crest({ alt, size = 36 }: CrestProps) {
+export function Crest({
+  alt,
+  size = 36,
+  src = `${import.meta.env.BASE_URL}avatar.png`,
+}: CrestProps) {
   return (
     <div
       className="group relative flex shrink-0 items-center justify-center transition-transform duration-300 ease-out hover:scale-110"
@@ -21,9 +26,7 @@ export function Crest({ alt, size = 36 }: CrestProps) {
         }}
       />
       <img
-        // Mesmo truque do content.ts: usa a "base" configurada no Vite para
-        // montar o caminho correto da imagem, funcionando local e no GitHub Pages.
-        src={`${import.meta.env.BASE_URL}avatar.png`}
+        src={src}
         alt={alt}
         className="absolute inset-[2px] rounded-full object-cover grayscale-[30%] contrast-[1.05]"
       />

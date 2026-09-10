@@ -1,6 +1,6 @@
 import {
   Briefcase,
-  ExternalLink,
+  Dices,
   Globe,
   Hourglass,
   Layers,
@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useRotatingWords } from "../../hooks/useRotatingWords";
 import type { PageId, SiteContent } from "../../lib/types";
-import { GlowLink } from "../ui/GlowLink";
 import { LanguageTierList } from "../ui/LanguageTierList";
 import { ProficiencyTagList } from "../ui/ProficiencyTagList";
 import { SheetPanel } from "../ui/SheetPanel";
@@ -18,6 +17,8 @@ import { StatTile } from "../ui/StatTile";
 interface CoverPageProps {
   content: SiteContent;
   onNavigate: (id: PageId) => void;
+  portraitSrc: string;
+  onSwapPortrait: () => void;
 }
 
 // Os 3 stats reais de cover.stats vêm sempre nessa ordem fixa (anos, empregadores,
@@ -33,14 +34,17 @@ const STAT_TONES: Array<"purple" | "teal" | "amber"> = [
 // Página I do livreto de ficha: retrato, nome, classe, tagline e os "campos"
 // de identidade (atributos reais, proficiências, idiomas), densa o bastante
 // pra funcionar sozinha caso o recrutador nunca vire a página.
-export function CoverPage({ content, onNavigate }: CoverPageProps) {
-  const { cover, social } = content;
+export function CoverPage({
+  content,
+  onNavigate,
+  portraitSrc,
+  onSwapPortrait,
+}: CoverPageProps) {
+  const { cover } = content;
   const { word: klass, index: classIndex } = useRotatingWords(
     cover.classes,
     2200,
   );
-  const emailHref =
-    social.find((link) => link.href.startsWith("mailto:"))?.href ?? "#";
 
   return (
     <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 lg:px-16 lg:pr-28">
@@ -60,10 +64,19 @@ export function CoverPage({ content, onNavigate }: CoverPageProps) {
               }}
             />
             <img
-              src={`${import.meta.env.BASE_URL}avatar.png`}
+              src={portraitSrc}
               alt={cover.portraitAlt}
               className="absolute inset-[3px] rounded-full object-cover grayscale-[25%] contrast-[1.05]"
             />
+            <button
+              type="button"
+              onClick={onSwapPortrait}
+              aria-label={cover.swapClassLabel}
+              title={cover.swapClassLabel}
+              className="absolute -bottom-1 -right-1 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-stroke bg-surface/90 text-muted backdrop-blur-md transition-all duration-300 hover:border-arcane-teal/70 hover:text-arcane-teal hover:shadow-glow-teal"
+            >
+              <Dices size={14} />
+            </button>
           </div>
 
           <h1 className="font-display text-4xl leading-[0.95] text-text-primary md:text-6xl">
@@ -95,9 +108,15 @@ export function CoverPage({ content, onNavigate }: CoverPageProps) {
                 {cover.ctaPrimary}
               </span>
             </button>
-            <GlowLink href={emailHref} size="lg" tone="teal">
-              {cover.ctaSecondary} <ExternalLink size={14} aria-hidden="true" />
-            </GlowLink>
+            <button
+              type="button"
+              onClick={() => onNavigate("contact")}
+              className="group relative inline-flex rounded-sm"
+            >
+              <span className="relative inline-flex items-center gap-2 rounded-sm border border-stroke bg-surface/80 px-6 py-3.5 text-sm text-muted backdrop-blur-md transition-all duration-300 group-hover:border-arcane-teal/70 group-hover:text-arcane-teal group-hover:shadow-glow-teal md:text-base">
+                {cover.ctaSecondary}
+              </span>
+            </button>
           </div>
         </div>
 
@@ -119,7 +138,7 @@ export function CoverPage({ content, onNavigate }: CoverPageProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 pt-2 sm:grid-cols-2">
+          <div className="flex flex-col gap-5 pt-2">
             <SheetPanel
               tone="teal"
               label={cover.proficienciesLabel}

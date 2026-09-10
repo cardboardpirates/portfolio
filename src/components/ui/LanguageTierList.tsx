@@ -17,14 +17,14 @@ interface LanguageTierListProps {
 
 export function LanguageTierList({ items }: LanguageTierListProps) {
   return (
-    <ul className="flex flex-col">
+    <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {items.map((item) => (
         <li
           key={item.label}
-          className="flex items-center justify-between gap-4 border-b border-stroke/40 py-1.5 last:border-b-0"
+          className="flex items-center justify-between gap-3 rounded-sm border border-stroke/50 bg-bg/40 px-3 py-2"
         >
-          <span className="text-sm text-text-primary/90">{item.label}</span>
           <div className="flex items-center gap-2">
+            <span className="text-sm text-text-primary/90">{item.label}</span>
             <div className="flex gap-1">
               {[0, 1, 2, 3].map((i) => (
                 <Diamond
@@ -40,10 +40,10 @@ export function LanguageTierList({ items }: LanguageTierListProps) {
                 />
               ))}
             </div>
-            <span className="text-[0.65rem] uppercase tracking-[0.2em] text-muted">
-              {item.tierLabel}
-            </span>
           </div>
+          <span className="text-[0.65rem] uppercase tracking-[0.2em] text-muted">
+            {item.tierLabel}
+          </span>
         </li>
       ))}
     </ul>

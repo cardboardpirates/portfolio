@@ -14,6 +14,7 @@ import { ArcaneBackground } from "./components/ui/ArcaneBackground";
 import { Crest } from "./components/ui/Crest";
 import { LanguageToggle } from "./components/ui/LanguageToggle";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
+import { useClassPortrait } from "./hooks/useClassPortrait";
 import { useLanguage } from "./hooks/useLanguage";
 import { usePageNav } from "./hooks/usePageNav";
 import { content } from "./lib/content";
@@ -22,6 +23,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const { language, toggleLanguage } = useLanguage();
   const { activeId, direction, navigate } = usePageNav();
+  const classPortrait = useClassPortrait();
   const site = content[language];
 
   useEffect(() => {
@@ -52,14 +54,19 @@ function App() {
           <ArcaneBackground />
 
           <header className="fixed left-0 top-0 z-50 flex items-center gap-3 p-4 md:p-6">
-            <Crest alt={site.cover.portraitAlt} />
+            <Crest alt={site.cover.portraitAlt} src={classPortrait.src} />
             <LanguageToggle language={language} onToggle={toggleLanguage} />
           </header>
 
           <main>
             <PageTransition pageKey={activeId} direction={direction}>
               {activeId === "cover" && (
-                <CoverPage content={site} onNavigate={navigate} />
+                <CoverPage
+                  content={site}
+                  onNavigate={navigate}
+                  portraitSrc={classPortrait.src}
+                  onSwapPortrait={classPortrait.swap}
+                />
               )}
               {activeId === "log" && <QuestLogPage content={site} />}
               {activeId === "portfolio" && <PortfolioPage content={site} />}
@@ -71,6 +78,9 @@ function App() {
             pages={site.nav.pages}
             activeId={activeId}
             onNavigate={navigate}
+            social={site.social}
+            statusLabel={site.contact.statusLabel}
+            copyright={site.contact.copyright}
           />
         </motion.div>
       )}

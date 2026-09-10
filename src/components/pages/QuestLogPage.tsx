@@ -1,17 +1,17 @@
 import { Calendar, GraduationCap, Hourglass, ScrollText } from "lucide-react";
 import type { SiteContent } from "../../lib/types";
 import { QuestLogEntry } from "../ui/QuestLogEntry";
-import { SealedQuestPanel } from "../ui/SealedQuestPanel";
 import { SheetHeading } from "../ui/SheetHeading";
 import { SheetPanel } from "../ui/SheetPanel";
+import { SideQuestPanel } from "../ui/SideQuestPanel";
 
 interface QuestLogPageProps {
   content: SiteContent;
 }
 
 // Página II: bio narrativa, o histórico profissional real como "diário de
-// missões", formação/treinamento, e o card de missão selada (trabalhos
-// ainda não publicados, sem inventar projetos).
+// missões", formação/treinamento, e o card de missão paralela (criação de
+// conteúdo de Magic: The Gathering, fora do trabalho com clientes).
 export function QuestLogPage({ content }: QuestLogPageProps) {
   const { log } = content;
 
@@ -47,7 +47,7 @@ export function QuestLogPage({ content }: QuestLogPageProps) {
           {log.training.map((entry) => (
             <SheetPanel
               key={entry.id}
-              tone={entry.status === "incomplete" ? "amber" : "neutral"}
+              tone="neutral"
               label={entry.period}
               labelIcon={Calendar}
               className="flex flex-col gap-1 p-5 pt-7"
@@ -72,11 +72,11 @@ export function QuestLogPage({ content }: QuestLogPageProps) {
             </SheetPanel>
           ))}
 
-          <SealedQuestPanel
-            eyebrow={log.sealedQuest.eyebrow}
-            title={log.sealedQuest.title}
-            body={log.sealedQuest.body}
-            links={log.sealedQuest.links}
+          <SideQuestPanel
+            eyebrow={log.sideQuest.eyebrow}
+            title={log.sideQuest.title}
+            body={log.sideQuest.body}
+            links={log.sideQuest.links}
           />
         </div>
       </div>

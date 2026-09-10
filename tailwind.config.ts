@@ -45,10 +45,6 @@ export default {
           "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        marquee: {
-          "0%": { transform: "translateX(0%)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
         "spin-slow": {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
@@ -58,7 +54,6 @@ export default {
       // já com duração, curva de tempo (easing) e repetição.
       animation: {
         "role-fade-in": "role-fade-in 0.4s ease-out",
-        marquee: "marquee 40s linear infinite",
         "spin-slow": "spin-slow 60s linear infinite",
       },
     },

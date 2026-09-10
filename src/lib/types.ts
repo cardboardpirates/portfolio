@@ -97,6 +97,7 @@ export interface SiteContent {
     classOutro: string;
     tagline: string;
     portraitAlt: string;
+    swapClassLabel: string;
     statsLabel: string;
     stats: StatTileContent[];
     proficienciesLabel: string;
@@ -118,7 +119,7 @@ export interface SiteContent {
     trainingLabel: string;
     incompleteTrainingLabel: string;
     training: TrainingEntryContent[];
-    sealedQuest: {
+    sideQuest: {
       eyebrow: string;
       title: string;
       body: string;
@@ -141,8 +142,10 @@ export interface SiteContent {
     heading: string;
     headingItalic: string;
     subtext: string;
-    marqueeText: string;
     ctaLabel: string;
+    diceLabel: string;
+    diceSuccessLabel: string;
+    diceSuccessDetail: string;
     statusLabel: string;
     copyright: string;
   };

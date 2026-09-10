@@ -7,8 +7,8 @@ const LINKEDIN_URL =
   "https://www.linkedin.com/in/pedro-di-mambro-visnardi-064075145";
 const GITHUB_URL = "https://github.com/cardboardpirates";
 const EMAIL = "visnardi.pedro@gmail.com";
-// import.meta.env.BASE_URL vem da configuração "base" do vite.config.ts (/portfolio/).
-const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
+const INSTAGRAM_URL = "https://www.instagram.com/opedrodemana/";
+const YOUTUBE_URL = "https://www.youtube.com/@PedroDeMana";
 
 const en: SiteContent = {
   meta: {
@@ -37,6 +37,7 @@ const en: SiteContent = {
     tagline:
       "Nine years spanning graphic design and frontend development, designing interfaces and building the code that ships them.",
     portraitAlt: "Pedro Visnardi",
+    swapClassLabel: "Swap class portrait",
     statsLabel: "Attributes",
     stats: [
       { value: 9, suffix: "+", label: "Years Experience" },
@@ -72,7 +73,7 @@ const en: SiteContent = {
       { label: "Portuguese", tier: "native", tierLabel: "Native" },
       { label: "English", tier: "advanced", tierLabel: "Advanced" },
       { label: "Spanish", tier: "intermediate", tierLabel: "Intermediate" },
-      { label: "French", tier: "basic", tierLabel: "Basic" },
+      { label: "French", tier: "intermediate", tierLabel: "Intermediate" },
     ],
     ctaPrimary: "View Quest Log",
     ctaSecondary: "Send a Raven",
@@ -139,14 +140,13 @@ const en: SiteContent = {
         status: "incomplete",
       },
     ],
-    sealedQuest: {
-      eyebrow: "Sealed Quest",
-      title: "Not yet unlocked",
-      body: "Rather than fill this space with placeholder projects, here's what's real right now: nine years of hybrid design and frontend work, documented on the résumé and LinkedIn.",
+    sideQuest: {
+      eyebrow: "Side Quest",
+      title: "Also making Magic: The Gathering content",
+      body: "Outside of client work, I write, shoot and edit videos and posts about Magic: The Gathering for a small but growing corner of the community.",
       links: [
-        { label: "Résumé", href: RESUME_URL, external: true },
-        { label: "LinkedIn", href: LINKEDIN_URL, external: true },
-        { label: "GitHub", href: GITHUB_URL, external: true },
+        { label: "Instagram", href: INSTAGRAM_URL, external: true },
+        { label: "YouTube", href: YOUTUBE_URL, external: true },
       ],
     },
   },
@@ -164,8 +164,10 @@ const en: SiteContent = {
     heading: "Let's",
     headingItalic: "talk",
     subtext: "Open to full-time frontend and UI roles. The inbox is open.",
-    marqueeText: "DESIGN MEETS CODE • ",
     ctaLabel: "Say Hello",
+    diceLabel: "Test your luck",
+    diceSuccessLabel: "Critical success!",
+    diceSuccessDetail: "This adventurer is ready to join your guild.",
     statusLabel: "Open to full-time roles",
     copyright: "© 2026 Pedro Visnardi",
   },
@@ -203,6 +205,7 @@ const pt: SiteContent = {
     tagline:
       "Nove anos entre design gráfico e desenvolvimento frontend, projetando interfaces e construindo o código que as coloca no ar.",
     portraitAlt: "Pedro Visnardi",
+    swapClassLabel: "Trocar classe",
     statsLabel: "Atributos",
     stats: [
       { value: 9, suffix: "+", label: "Anos de Experiência" },
@@ -238,7 +241,7 @@ const pt: SiteContent = {
       { label: "Português", tier: "native", tierLabel: "Nativo" },
       { label: "Inglês", tier: "advanced", tierLabel: "Avançado" },
       { label: "Espanhol", tier: "intermediate", tierLabel: "Intermediário" },
-      { label: "Francês", tier: "basic", tierLabel: "Básico" },
+      { label: "Francês", tier: "intermediate", tierLabel: "Intermediário" },
     ],
     ctaPrimary: "Ver Diário de Missões",
     ctaSecondary: "Enviar um Corvo",
@@ -307,14 +310,13 @@ const pt: SiteContent = {
         status: "incomplete",
       },
     ],
-    sealedQuest: {
-      eyebrow: "Missão Selada",
-      title: "Ainda não desbloqueada",
-      body: "Em vez de preencher este espaço com projetos fictícios, aqui está o que é real agora: nove anos de trabalho híbrido em design e frontend, documentados no currículo e no LinkedIn.",
+    sideQuest: {
+      eyebrow: "Missão Paralela",
+      title: "Também crio conteúdo de Magic: The Gathering",
+      body: "Fora do trabalho com clientes, escrevo, gravo e edito vídeos e posts sobre Magic: The Gathering pra um cantinho da comunidade que só cresce.",
       links: [
-        { label: "Currículo", href: RESUME_URL, external: true },
-        { label: "LinkedIn", href: LINKEDIN_URL, external: true },
-        { label: "GitHub", href: GITHUB_URL, external: true },
+        { label: "Instagram", href: INSTAGRAM_URL, external: true },
+        { label: "YouTube", href: YOUTUBE_URL, external: true },
       ],
     },
   },
@@ -333,8 +335,10 @@ const pt: SiteContent = {
     headingItalic: "conversar",
     subtext:
       "Aberto a vagas de frontend e UI em tempo integral. A caixa de entrada está aberta.",
-    marqueeText: "DESIGN ENCONTRA CÓDIGO • ",
     ctaLabel: "Diga Olá",
+    diceLabel: "Teste sua sorte",
+    diceSuccessLabel: "Sucesso crítico!",
+    diceSuccessDetail: "Este aventureiro está pronto para se juntar à sua guilda.",
     statusLabel: "Aberto a vagas full-time",
     copyright: "© 2026 Pedro Visnardi",
   },

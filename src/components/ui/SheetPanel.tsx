@@ -2,7 +2,7 @@
 // existe uma caixa (tiles de atributo, entradas do diário de missões, o card
 // de missão selada, etc.), sempre com os mesmos 4 cantos em SVG e uma segunda
 // borda interna "gravada", pra não ficar só uma linha fina simples.
-import type { ElementType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { CornerBracket, type BracketTone } from "./CornerBracket";
 
@@ -11,7 +11,6 @@ interface SheetPanelProps {
   tone?: BracketTone;
   glow?: boolean;
   className?: string;
-  as?: ElementType;
   // Etiqueta que fica encostada na borda superior do painel, como o nome de
   // um campo na ficha oficial de D&D. Só faz sentido pra UM painel só sendo
   // rotulado, não para um cabeçalho que nomeia uma coluna inteira de caixas.
@@ -45,12 +44,11 @@ export function SheetPanel({
   tone = "neutral",
   glow = false,
   className = "",
-  as: Component = "div",
   label,
   labelIcon: LabelIcon,
 }: SheetPanelProps) {
   return (
-    <Component
+    <div
       className={`relative rounded-md border border-stroke bg-surface/80 ${glow ? glowClass[tone] : ""} ${className}`}
     >
       <CornerBracket tone={tone} className="pointer-events-none absolute left-2 top-2" />
@@ -81,6 +79,6 @@ export function SheetPanel({
         </div>
       )}
       {children}
-    </Component>
+    </div>
   );
 }
