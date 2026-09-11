@@ -222,10 +222,20 @@ function DitheredWaves({
   mouseRadius,
 }: DitheredWavesProps) {
   const mesh = useRef<THREE.Mesh>(null);
+  const material = useRef<THREE.ShaderMaterial>(null);
   const mouseRef = useRef(new THREE.Vector2());
   const { viewport, size, gl, invalidate } = useThree();
 
-  const waveUniformsRef = useRef<WaveUniforms>({
+  // Passado só pro <shaderMaterial> na montagem, pra dar a forma inicial dos
+  // uniforms. IMPORTANTE: o react-three-fiber CLONA cada uniform desse objeto
+  // num objeto novo dentro de material.uniforms (pra manter uma referência
+  // estável mesmo se o objeto inteiro de uniforms mudar de identidade): só
+  // pra tipos por referência (Vector2, Color) essa cópia rasa preserva o
+  // vínculo; pra números primitivos como "time", vira uma cópia solta que
+  // nunca mais se atualiza sozinha. Por isso todo update por frame, abaixo,
+  // escreve direto em material.current.uniforms (o objeto de verdade ligado
+  // ao shader), nunca neste objeto inicial.
+  const initialUniforms: WaveUniforms = {
     time: new THREE.Uniform(0),
     resolution: new THREE.Uniform(new THREE.Vector2()),
     waveSpeed: new THREE.Uniform(waveSpeed),
@@ -236,13 +246,15 @@ function DitheredWaves({
     mousePos: new THREE.Uniform(new THREE.Vector2()),
     enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
     mouseRadius: new THREE.Uniform(mouseRadius),
-  });
+  };
 
   useEffect(() => {
+    const u = material.current?.uniforms as WaveUniforms | undefined;
+    if (!u) return;
     const dpr = gl.getPixelRatio();
     const newWidth = Math.floor(size.width * dpr);
     const newHeight = Math.floor(size.height * dpr);
-    const currentRes = waveUniformsRef.current.resolution.value;
+    const currentRes = u.resolution.value;
     if (currentRes.x !== newWidth || currentRes.y !== newHeight) {
       currentRes.set(newWidth, newHeight);
     }
@@ -253,7 +265,8 @@ function DitheredWaves({
   const elapsedRef = useRef(0);
 
   useFrame((_, delta) => {
-    const u = waveUniformsRef.current;
+    const u = material.current?.uniforms as WaveUniforms | undefined;
+    if (!u) return;
     // Acumula o próprio tempo a partir do "delta" que o react-three-fiber já
     // calcula (em vez de chamar clock.getElapsedTime(), que internamente
     // chama clock.getDelta() de novo: um segundo consumo do mesmo relógio
@@ -297,9 +310,10 @@ function DitheredWaves({
       <mesh ref={mesh} scale={[viewport.width, viewport.height, 1]}>
         <planeGeometry args={[1, 1]} />
         <shaderMaterial
+          ref={material}
           vertexShader={waveVertexShader}
           fragmentShader={waveFragmentShader}
-          uniforms={waveUniformsRef.current}
+          uniforms={initialUniforms}
         />
       </mesh>
       <EffectComposer>
