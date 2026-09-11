@@ -8,6 +8,7 @@
 // movimento brusco que essa preferência existe pra evitar, e amarrar isso a
 // reduceMotion deixava o fundo congelado sempre que o SO do usuário tinha
 // "reduzir movimento" ativado.
+import { memo } from "react";
 import { Dither } from "./Dither";
 
 // Roxo de destaque escolhido pra combinar com --arcane-purple, em RGB 0..1
@@ -19,7 +20,11 @@ const WAVE_COLOR: [number, number, number] = [
 // com o fundo real do site em vez do preto puro padrão do componente.
 const BACKGROUND_COLOR: [number, number, number] = [0.043, 0.043, 0.058];
 
-export function ArcaneBackground() {
+// Memoizado (sem props, então nunca deveria re-renderizar de verdade): o App
+// re-renderiza inteiro em trocas de estado alheias ao fundo (idioma,
+// navegação entre páginas), e um re-render aqui recriava objetos que o
+// Dither espera com identidade estável entre renders, resetando o shader.
+export const ArcaneBackground = memo(function ArcaneBackground() {
   return (
     <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden bg-bg">
       <Dither
@@ -40,4 +45,4 @@ export function ArcaneBackground() {
       <div className="absolute inset-0 bg-black/25" />
     </div>
   );
-}
+});

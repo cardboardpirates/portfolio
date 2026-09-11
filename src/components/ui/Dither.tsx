@@ -235,7 +235,13 @@ function DitheredWaves({
   // nunca mais se atualiza sozinha. Por isso todo update por frame, abaixo,
   // escreve direto em material.current.uniforms (o objeto de verdade ligado
   // ao shader), nunca neste objeto inicial.
-  const initialUniforms: WaveUniforms = {
+  // Precisa de identidade estável entre renders (useRef, não um const solto):
+  // se o <ArcaneBackground> pai re-renderizar por qualquer motivo alheio ao
+  // Dither (ex.: troca de idioma lá em cima em <App>, que não passa nenhuma
+  // prop pro Dither mas ainda assim o re-renderiza), um objeto NOVO aqui faria
+  // o react-three-fiber reprocessar o merge inicial descrito acima e resetar
+  // uniforms como "resolution" de volta pro valor zerado, quebrando o shader.
+  const initialUniformsRef = useRef<WaveUniforms>({
     time: new THREE.Uniform(0),
     resolution: new THREE.Uniform(new THREE.Vector2()),
     waveSpeed: new THREE.Uniform(waveSpeed),
@@ -246,7 +252,7 @@ function DitheredWaves({
     mousePos: new THREE.Uniform(new THREE.Vector2()),
     enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
     mouseRadius: new THREE.Uniform(mouseRadius),
-  };
+  });
 
   useEffect(() => {
     const u = material.current?.uniforms as WaveUniforms | undefined;
@@ -313,7 +319,7 @@ function DitheredWaves({
           ref={material}
           vertexShader={waveVertexShader}
           fragmentShader={waveFragmentShader}
-          uniforms={initialUniforms}
+          uniforms={initialUniformsRef.current}
         />
       </mesh>
       <EffectComposer>
