@@ -10,11 +10,6 @@ import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
 import { Effect } from "postprocessing";
 import * as THREE from "three";
 
-// DIAGNÓSTICO TEMPORÁRIO: com true, pula o EffectComposer/dithering pra
-// isolar se o congelamento da animação vem do pós-processamento ou da malha
-// de ondas em si. Reverter depois do teste.
-const DEBUG_DISABLE_COMPOSER = true;
-
 const waveVertexShader = `
 precision highp float;
 varying vec2 vUv;
@@ -228,7 +223,7 @@ function DitheredWaves({
 }: DitheredWavesProps) {
   const mesh = useRef<THREE.Mesh>(null);
   const mouseRef = useRef(new THREE.Vector2());
-  const { viewport, size, gl } = useThree();
+  const { viewport, size, gl, invalidate } = useThree();
 
   const waveUniformsRef = useRef<WaveUniforms>({
     time: new THREE.Uniform(0),
@@ -280,6 +275,11 @@ function DitheredWaves({
     u.enableMouseInteraction.value = enableMouseInteraction ? 1 : 0;
     u.mouseRadius.value = mouseRadius;
     if (enableMouseInteraction) u.mousePos.value.copy(mouseRef.current);
+    // Pedir explicitamente o próximo frame: só o movimento do mouse estava
+    // provocando redesenho (o handler de ponteiro do r3f chama invalidate()
+    // sozinho); a deriva das ondas por tempo, sem isso, nunca disparava um
+    // novo frame sozinha.
+    if (!disableAnimation) invalidate();
   });
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
@@ -302,11 +302,9 @@ function DitheredWaves({
           uniforms={waveUniformsRef.current}
         />
       </mesh>
-      {!DEBUG_DISABLE_COMPOSER && (
-        <EffectComposer>
-          <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
-        </EffectComposer>
-      )}
+      <EffectComposer>
+        <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
+      </EffectComposer>
       <mesh
         onPointerMove={handlePointerMove}
         scale={[viewport.width, viewport.height, 1]}
@@ -352,6 +350,7 @@ export function Dither({
       camera={{ position: [0, 0, 6] }}
       dpr={[1, 2]}
       gl={{ antialias: true, preserveDrawingBuffer: true }}
+      frameloop="always"
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
