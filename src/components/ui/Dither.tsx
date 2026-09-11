@@ -255,10 +255,17 @@ function DitheredWaves({
 
   const prevColor = useRef(waveColor);
   const prevBackgroundColor = useRef(backgroundColor);
+  const elapsedRef = useRef(0);
 
-  useFrame(({ clock }) => {
+  useFrame((_, delta) => {
     const u = waveUniformsRef.current;
-    if (!disableAnimation) u.time.value = clock.getElapsedTime();
+    // Acumula o próprio tempo a partir do "delta" que o react-three-fiber já
+    // calcula (em vez de chamar clock.getElapsedTime(), que internamente
+    // chama clock.getDelta() de novo: um segundo consumo do mesmo relógio
+    // compartilhado, na mesma volta do loop em que o próprio r3f já chama
+    // getDelta() pra render, disputando o delta real entre as duas chamadas).
+    if (!disableAnimation) elapsedRef.current += delta;
+    u.time.value = elapsedRef.current;
     if (u.waveSpeed.value !== waveSpeed) u.waveSpeed.value = waveSpeed;
     if (u.waveFrequency.value !== waveFrequency) u.waveFrequency.value = waveFrequency;
     if (u.waveAmplitude.value !== waveAmplitude) u.waveAmplitude.value = waveAmplitude;
