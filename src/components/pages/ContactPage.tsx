@@ -17,7 +17,7 @@ export function ContactPage({ content }: ContactPageProps) {
     social.find((link) => link.href.startsWith("mailto:"))?.href ?? "#";
 
   return (
-    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col justify-center gap-16 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 lg:px-16 lg:pr-28">
+    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col justify-center gap-16 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
       <div className="flex flex-col items-center gap-6 text-center">
         <div className="flex items-center gap-3">
           <Send size={13} className="text-muted" />

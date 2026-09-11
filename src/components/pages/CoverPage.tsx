@@ -47,7 +47,7 @@ export function CoverPage({
   );
 
   return (
-    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 lg:px-16 lg:pr-28">
+    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
       <div className="grid flex-1 grid-cols-1 items-center gap-10 md:grid-cols-12 md:gap-8">
         <div className="flex flex-col items-center gap-5 text-center md:col-span-5 md:items-start md:text-left">
           <span className="text-xs uppercase tracking-[0.3em] text-muted">

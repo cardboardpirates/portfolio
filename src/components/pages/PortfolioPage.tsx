@@ -21,7 +21,7 @@ export function PortfolioPage({ content }: PortfolioPageProps) {
   }));
 
   return (
-    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col gap-6 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 lg:px-16 lg:pr-28">
+    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col gap-6 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
       <SheetHeading
         eyebrow={portfolio.eyebrow}
         heading={portfolio.heading}
