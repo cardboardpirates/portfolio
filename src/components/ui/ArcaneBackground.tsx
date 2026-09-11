@@ -1,102 +1,39 @@
-// Fundo ambiente "Arcane HUD": duas manchas de brilho (roxo/teal) e três dados
-// wireframe decorativos, todos reagindo de leve ao movimento do mouse
-// (mesma técnica de parallax que existia no antigo GradientBackground, só
-// generalizada para várias camadas). Monta uma única vez na raiz do app,
-// atrás das 3 páginas, e persiste durante a troca entre elas.
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import { useEffect } from "react";
-import { Dice } from "./Dice";
+// Fundo ambiente "Arcane HUD": ondas dithered (componente Dither, reactbits.dev)
+// cobrindo toda a tela, com scanlines/grain por cima pra manter a textura
+// "retrô" do resto do site. Monta uma única vez na raiz do app, atrás das 3
+// páginas, e persiste durante a troca entre elas.
+//
+// A animação do shader fica sempre ligada (não segue prefers-reduced-motion):
+// é um movimento ambiente muito lento (waveSpeed baixo), não o tipo de
+// movimento brusco que essa preferência existe pra evitar, e amarrar isso a
+// reduceMotion deixava o fundo congelado sempre que o SO do usuário tinha
+// "reduzir movimento" ativado.
+import { Dither } from "./Dither";
 
-const blobTransition = (duration: number, delay = 0) => ({
-  duration,
-  delay,
-  repeat: Infinity,
-  repeatType: "mirror" as const,
-  ease: "easeInOut" as const,
-});
+// Roxo de destaque escolhido pra combinar com --arcane-purple, em RGB 0..1
+// (formato que o shader do Dither espera).
+const WAVE_COLOR: [number, number, number] = [
+  0.22745098039215686, 0.14901960784313725, 0.3686274509803922,
+];
+// --bg (HSL 240 15% 5%) convertido pra RGB 0..1, pra o fundo do shader bater
+// com o fundo real do site em vez do preto puro padrão do componente.
+const BACKGROUND_COLOR: [number, number, number] = [0.043, 0.043, 0.058];
 
 export function ArcaneBackground() {
-  const reduceMotion = useReducedMotion();
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 70, damping: 18, mass: 0.5 });
-  const springY = useSpring(mouseY, { stiffness: 70, damping: 18, mass: 0.5 });
-
-  useEffect(() => {
-    if (reduceMotion) return;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      mouseX.set((event.clientX / window.innerWidth) * 2 - 1);
-      mouseY.set((event.clientY / window.innerHeight) * 2 - 1);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [reduceMotion, mouseX, mouseY]);
-
-  const glow1X = useTransform(springX, [-1, 1], [-70, 70]);
-  const glow1Y = useTransform(springY, [-1, 1], [-50, 50]);
-  const glow2X = useTransform(springX, [-1, 1], [60, -60]);
-  const glow2Y = useTransform(springY, [-1, 1], [40, -40]);
-
-  const dice1X = useTransform(springX, [-1, 1], [-28, 28]);
-  const dice1Y = useTransform(springY, [-1, 1], [-22, 22]);
-  const dice2X = useTransform(springX, [-1, 1], [22, -22]);
-  const dice2Y = useTransform(springY, [-1, 1], [18, -18]);
-  const dice3X = useTransform(springX, [-1, 1], [-16, 16]);
-  const dice3Y = useTransform(springY, [-1, 1], [13, -13]);
-
   return (
-    <div
-      aria-hidden="true"
-      className="fixed inset-0 z-0 overflow-hidden bg-bg"
-    >
-      <motion.div
-        className="absolute -left-[10%] -top-[15%] h-[60%] w-[60%] rounded-full blur-[120px]"
-        style={{
-          backgroundColor: "hsl(var(--arcane-purple) / 0.22)",
-          x: glow1X,
-          y: glow1Y,
-        }}
-        animate={reduceMotion ? undefined : { scale: [1, 1.08, 0.96, 1] }}
-        transition={blobTransition(20)}
+    <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden bg-bg">
+      <Dither
+        waveColor={WAVE_COLOR}
+        backgroundColor={BACKGROUND_COLOR}
+        disableAnimation={false}
+        enableMouseInteraction
+        mouseRadius={0.5}
+        colorNum={5}
+        pixelSize={2}
+        waveAmplitude={0.15}
+        waveFrequency={5}
+        waveSpeed={0.03}
       />
-      <motion.div
-        className="absolute -right-[10%] -bottom-[15%] h-[55%] w-[55%] rounded-full blur-[120px]"
-        style={{
-          backgroundColor: "hsl(var(--arcane-teal) / 0.16)",
-          x: glow2X,
-          y: glow2Y,
-        }}
-        animate={reduceMotion ? undefined : { scale: [1, 0.94, 1.06, 1] }}
-        transition={blobTransition(24, 2)}
-      />
-
-      <motion.div
-        className="absolute left-[8%] top-[16%] opacity-40 md:opacity-60"
-        style={{ x: dice1X, y: dice1Y }}
-      >
-        <Dice sides={20} tone="purple" size={64} />
-      </motion.div>
-      <motion.div
-        className="absolute right-[12%] top-[52%] opacity-35 md:opacity-55"
-        style={{ x: dice2X, y: dice2Y }}
-      >
-        <Dice sides={6} tone="teal" size={48} />
-      </motion.div>
-      <motion.div
-        className="absolute bottom-[12%] left-[22%] opacity-35 md:opacity-50"
-        style={{ x: dice3X, y: dice3Y }}
-      >
-        <Dice sides={20} tone="amber" size={44} />
-      </motion.div>
 
       <div className="arcane-scanlines absolute inset-0 opacity-40" />
       <div className="arcane-grain absolute inset-0 opacity-[0.04]" />

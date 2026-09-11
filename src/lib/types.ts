@@ -72,6 +72,7 @@ export interface PortfolioTileContent {
   id: string;
   image: string;
   title?: string;
+  description?: string;
   href?: string;
 }
 
