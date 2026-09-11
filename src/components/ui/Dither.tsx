@@ -10,6 +10,11 @@ import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
 import { Effect } from "postprocessing";
 import * as THREE from "three";
 
+// DIAGNÓSTICO TEMPORÁRIO: com true, pula o EffectComposer/dithering pra
+// isolar se o congelamento da animação vem do pós-processamento ou da malha
+// de ondas em si. Reverter depois do teste.
+const DEBUG_DISABLE_COMPOSER = true;
+
 const waveVertexShader = `
 precision highp float;
 varying vec2 vUv;
@@ -290,9 +295,11 @@ function DitheredWaves({
           uniforms={waveUniformsRef.current}
         />
       </mesh>
-      <EffectComposer>
-        <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
-      </EffectComposer>
+      {!DEBUG_DISABLE_COMPOSER && (
+        <EffectComposer>
+          <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
+        </EffectComposer>
+      )}
       <mesh
         onPointerMove={handlePointerMove}
         scale={[viewport.width, viewport.height, 1]}
