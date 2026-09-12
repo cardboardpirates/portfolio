@@ -44,33 +44,42 @@ export function QuestLogPage({ content }: QuestLogPageProps) {
             <GraduationCap size={13} className="shrink-0" />
             {log.trainingLabel}
           </div>
-          {log.training.map((entry) => (
-            <SheetPanel
-              key={entry.id}
-              tone="neutral"
-              label={entry.period}
-              labelIcon={Calendar}
-              className="flex flex-col gap-1 p-5 pt-7"
-            >
-              <div className="flex items-center gap-2">
-                {entry.status === "incomplete" ? (
-                  <Hourglass size={16} className="shrink-0 text-arcane-amber" />
-                ) : (
-                  <GraduationCap size={16} className="shrink-0 text-muted" />
+          {log.training.map((entry) => {
+            const isIncomplete = entry.status === "incomplete";
+            return (
+              <SheetPanel
+                key={entry.id}
+                tone="neutral"
+                label={entry.period}
+                labelIcon={Calendar}
+                // Formação incompleta é "desaturada": sem cor de destaque
+                // nenhuma (nem o amber do resto do site) e com opacidade
+                // reduzida, pra ler como um bloco indisponível na ficha em
+                // vez de só mais uma entrada de treino comum.
+                className={`flex flex-col gap-1 p-5 pt-7 ${
+                  isIncomplete ? "opacity-50 grayscale" : ""
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {isIncomplete ? (
+                    <Hourglass size={16} className="shrink-0 text-muted" />
+                  ) : (
+                    <GraduationCap size={16} className="shrink-0 text-muted" />
+                  )}
+                  <h3 className="font-display text-lg text-text-primary">
+                    {entry.institution}
+                  </h3>
+                </div>
+                <p className="text-sm text-muted">{entry.program}</p>
+                {isIncomplete && (
+                  <span className="mt-1 flex w-fit items-center gap-1.5 rounded-sm border border-stroke px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.2em] text-muted">
+                    <Hourglass size={10} />
+                    {log.incompleteTrainingLabel}
+                  </span>
                 )}
-                <h3 className="font-display text-lg text-text-primary">
-                  {entry.institution}
-                </h3>
-              </div>
-              <p className="text-sm text-muted">{entry.program}</p>
-              {entry.status === "incomplete" && (
-                <span className="mt-1 flex w-fit items-center gap-1.5 rounded-sm border border-arcane-amber/40 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.2em] text-arcane-amber">
-                  <Hourglass size={10} />
-                  {log.incompleteTrainingLabel}
-                </span>
-              )}
-            </SheetPanel>
-          ))}
+              </SheetPanel>
+            );
+          })}
 
           <SideQuestPanel
             eyebrow={log.sideQuest.eyebrow}
