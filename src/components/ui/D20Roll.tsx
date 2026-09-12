@@ -102,10 +102,13 @@ const FLASH_LIGHT_POSITION = REVEAL_DIR.clone().multiplyScalar(1.8).toArray();
 const SPIN_DURATION = 2;
 const REDUCED_SPIN_DURATION = 0.3;
 const FLASH_DURATION = 0.6;
-// Voltas extras (além do necessário) na rolagem, só pra parecer um giro de
-// verdade em vez de já começar "mirando" no alvo.
-const MIN_EXTRA_SPINS = 2;
-const MAX_EXTRA_SPINS = 4;
+// Voltas do eixo de "tombo" (independente do eixo de correção calculado no
+// useEffect abaixo), só pra parecer um giro de verdade em vez de já começar
+// "mirando" no alvo. Como é sempre um número inteiro de voltas completas, em
+// t=1 esse componente vale a identidade e nunca muda onde o dado realmente
+// pousa.
+const MIN_TUMBLE_SPINS = 2;
+const MAX_TUMBLE_SPINS = 4;
 // Um "chacoalhar" que decai a zero exatamente no fim: dá o efeito de dado
 // tombando/quicando de verdade por cima do giro principal, sem nunca mudar
 // o resultado final (contribuição nula em t=1).
@@ -122,8 +125,10 @@ interface AnimState {
   stage: "spin" | "flash";
   startTime: number;
   qStart: THREE.Quaternion;
-  spinAxis: THREE.Vector3;
-  totalAngle: number;
+  correctionAxis: THREE.Vector3;
+  correctionAngle: number;
+  tumbleAxis: THREE.Vector3;
+  tumbleTurns: number;
   wobbleAxis: THREE.Vector3;
   wobblePhase: number;
 }
@@ -153,27 +158,40 @@ function Die({ phase, reduceMotion, onSettled }: DieProps) {
       const qStart = group ? group.quaternion.clone() : new THREE.Quaternion();
 
       // Rotação exata necessária pra ir de onde o dado está agora até o
-      // alvo (TARGET_QUATERNION), decomposta em eixo+ângulo — depois somamos
-      // voltas extras de 2π no mesmo eixo (fisicamente idênticas, só dão
-      // mais giro visual) em vez de girar em eixos aleatórios e "corrigir"
-      // com um slerp no final, que é o que fazia a rolagem parecer manipulada.
+      // alvo (TARGET_QUATERNION), decomposta em eixo+ângulo. Depois da
+      // primeira rolagem, o dado já parte exatamente do alvo, então esse
+      // ângulo de correção fica ~0 — quem dá o giro visual é o eixo de
+      // "tombo" abaixo, sorteado do zero a cada rolagem (por isso a direção
+      // do giro muda a cada clique, mesmo sempre pousando na mesma face).
       const qDelta = TARGET_QUATERNION.clone().multiply(qStart.clone().invert());
       const w = THREE.MathUtils.clamp(qDelta.w, -1, 1);
-      const angle = 2 * Math.acos(w);
+      const correctionAngle = 2 * Math.acos(w);
       const s = Math.sqrt(1 - w * w);
-      const spinAxis =
+      const correctionAxis =
         s < 1e-6
           ? new THREE.Vector3(0, 1, 0)
           : new THREE.Vector3(qDelta.x / s, qDelta.y / s, qDelta.z / s);
-      const extraSpins =
-        MIN_EXTRA_SPINS + Math.floor(Math.random() * (MAX_EXTRA_SPINS - MIN_EXTRA_SPINS + 1));
+
+      // Eixo de tombo: completamente independente da correção acima, e
+      // sorteado a cada rolagem. Como só gira um número inteiro de voltas
+      // completas (2π · tumbleTurns), em t=1 essa rotação vale a identidade
+      // e nunca desvia o pouso final da face 20 — só muda o "caminho" até lá.
+      const tumbleTurns =
+        MIN_TUMBLE_SPINS + Math.floor(Math.random() * (MAX_TUMBLE_SPINS - MIN_TUMBLE_SPINS + 1));
+      const tumbleAxis = new THREE.Vector3(
+        Math.random() - 0.5,
+        Math.random() - 0.5,
+        Math.random() - 0.5,
+      ).normalize();
 
       animRef.current = {
         stage: "spin",
         startTime: performance.now() / 1000,
         qStart,
-        spinAxis,
-        totalAngle: angle + Math.PI * 2 * extraSpins,
+        correctionAxis,
+        correctionAngle,
+        tumbleAxis,
+        tumbleTurns,
         wobbleAxis: new THREE.Vector3(
           Math.random() - 0.5,
           Math.random() - 0.5,
@@ -204,12 +222,19 @@ function Die({ phase, reduceMotion, onSettled }: DieProps) {
       const t = Math.min(elapsed / spinDuration, 1);
       const eased = easeOutCubic(t);
 
-      // Giro principal: um único eixo, desacelerando suavemente (a mesma
-      // curva do início ao fim) até parar exatamente na face 20 — sem trocar
-      // de fase nem "corrigir" nada no final, é uma curva só.
-      const spinQuat = new THREE.Quaternion().setFromAxisAngle(
-        anim.spinAxis,
-        anim.totalAngle * eased,
+      // Giro principal: dois eixos compostos, ambos na mesma curva de
+      // desaceleração (sem trocar de fase nem "corrigir" nada no final) —
+      // a correção (quase nula após a primeira rolagem) mira exatamente na
+      // face 20, e o tombo dá a volta completa (2π · tumbleTurns) que varia
+      // de direção a cada rolagem sem nunca desviar o pouso, já que em t=1
+      // ele fecha em voltas inteiras e vale a identidade.
+      const correctionQuat = new THREE.Quaternion().setFromAxisAngle(
+        anim.correctionAxis,
+        anim.correctionAngle * eased,
+      );
+      const tumbleQuat = new THREE.Quaternion().setFromAxisAngle(
+        anim.tumbleAxis,
+        anim.tumbleTurns * Math.PI * 2 * eased,
       );
 
       // Chacoalhar decaindo: some completamente até t=1, então não afeta o
@@ -219,7 +244,11 @@ function Die({ phase, reduceMotion, onSettled }: DieProps) {
         wobbleAmp * Math.sin(t * WOBBLE_FREQUENCY * Math.PI * 2 + anim.wobblePhase);
       const wobbleQuat = new THREE.Quaternion().setFromAxisAngle(anim.wobbleAxis, wobbleAngle);
 
-      group.quaternion.copy(anim.qStart).premultiply(spinQuat).premultiply(wobbleQuat);
+      group.quaternion
+        .copy(anim.qStart)
+        .premultiply(tumbleQuat)
+        .premultiply(correctionQuat)
+        .premultiply(wobbleQuat);
 
       // Um pulinho vertical, no lugar (sem X/Z), decaindo junto com o wobble.
       group.position.y = Math.abs(Math.sin(t * Math.PI * 5)) * 0.18 * Math.pow(1 - t, 2);
