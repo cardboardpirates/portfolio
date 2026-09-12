@@ -1,13 +1,5 @@
 import { useCallback, useState } from "react";
-
-// As 4 imagens de "classe" ficam em public/ (mesmo padrão de avatar.png),
-// nome em minúsculo e sem acento pra evitar problema de URL-encoding.
-const CLASS_PORTRAITS = [
-  { file: "classe_clerigo.png", name: "Clérigo" },
-  { file: "classe_ladino.png", name: "Ladino" },
-  { file: "classe_mago.png", name: "Mago" },
-  { file: "classe_paladino.png", name: "Paladino" },
-] as const;
+import { CLASS_PORTRAITS, classPortraitSrc } from "../lib/classPortraits";
 
 function pickIndex(exclude?: number): number {
   if (CLASS_PORTRAITS.length <= 1) return 0;
@@ -17,7 +9,9 @@ function pickIndex(exclude?: number): number {
 }
 
 // Sorteia uma classe ao montar (uma vez por abertura do site) e expõe
-// "swap" pra sortear outra sem repetir a atual.
+// "swap" pra sortear outra sem repetir a atual. As 4 imagens já foram
+// pré-carregadas pela tela de loading (useAssetPreload), então trocar aqui
+// só troca o "src" de uma imagem que o navegador já tem em cache.
 export function useClassPortrait() {
   const [index, setIndex] = useState(() => pickIndex());
   const swap = useCallback(() => {
@@ -26,7 +20,7 @@ export function useClassPortrait() {
   const portrait = CLASS_PORTRAITS[index];
 
   return {
-    src: `${import.meta.env.BASE_URL}${portrait.file}`,
+    src: classPortraitSrc(portrait.file),
     className: portrait.name,
     swap,
   };

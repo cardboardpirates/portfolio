@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { useLoadingProgress } from "../../hooks/useLoadingProgress";
+import { useAssetPreload } from "../../hooks/useAssetPreload";
 import { useRotatingWords } from "../../hooks/useRotatingWords";
 
 // "onComplete" é um exemplo do padrão "callback prop": o componente pai (App.tsx)
@@ -17,9 +17,10 @@ export function LoadingScreen({
   words,
   onComplete,
 }: LoadingScreenProps) {
-  // Reaproveita dois hooks customizados: um para a barra de progresso (0 a 100)
-  // e outro para alternar as palavras exibidas (ex: "Design", "Build", "Ship").
-  const progress = useLoadingProgress(2700);
+  // Reaproveita dois hooks customizados: um para a barra de progresso (0 a 100,
+  // baseada no carregamento real de fontes/imagens) e outro para alternar as
+  // palavras exibidas (ex: "Design", "Build", "Ship").
+  const progress = useAssetPreload();
   const { word, index } = useRotatingWords(words, 900);
   // Flag para garantir que onComplete só seja chamado uma vez, mesmo que este
   // efeito rode de novo (por exemplo, no StrictMode do React em desenvolvimento).
