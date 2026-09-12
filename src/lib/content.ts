@@ -161,10 +161,11 @@ const en: SiteContent = {
   },
   contact: {
     eyebrow: "Send a Raven",
-    heading: "Let's",
-    headingItalic: "talk",
-    subtext: "Open to full-time frontend and UI roles. The inbox is open.",
-    ctaLabel: "Say Hello",
+    heading: "Find",
+    headingItalic: "your next adventurer",
+    subtext:
+      "A new guild member might be right here. Roll the die and see if fate delivers you a raven.",
+    ctaLabel: "Send a Raven",
     diceLabel: "Test your luck",
     diceSuccessLabel: "Critical success!",
     diceSuccessDetail: "This adventurer is ready to join your guild.",
@@ -331,11 +332,11 @@ const pt: SiteContent = {
   },
   contact: {
     eyebrow: "Enviar um Corvo",
-    heading: "Vamos",
-    headingItalic: "conversar",
+    heading: "Encontre",
+    headingItalic: "seu próximo aventureiro",
     subtext:
-      "Aberto a vagas de frontend e UI em tempo integral. A caixa de entrada está aberta.",
-    ctaLabel: "Diga Olá",
+      "Um novo membro pra sua guilda pode estar bem aqui. Role o dado e veja se o destino te entrega um corvo.",
+    ctaLabel: "Enviar um Corvo",
     diceLabel: "Teste sua sorte",
     diceSuccessLabel: "Sucesso crítico!",
     diceSuccessDetail: "Este aventureiro está pronto para se juntar à sua guilda.",
