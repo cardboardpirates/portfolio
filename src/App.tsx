@@ -11,7 +11,6 @@ import { CoverPage } from "./components/pages/CoverPage";
 import { PortfolioPage } from "./components/pages/PortfolioPage";
 import { QuestLogPage } from "./components/pages/QuestLogPage";
 import { ArcaneBackground } from "./components/ui/ArcaneBackground";
-import { Crest } from "./components/ui/Crest";
 import { LanguageToggle } from "./components/ui/LanguageToggle";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { useClassPortrait } from "./hooks/useClassPortrait";
@@ -53,8 +52,7 @@ function App() {
         >
           <ArcaneBackground />
 
-          <header className="fixed left-0 top-0 z-50 flex items-center gap-3 p-4 md:p-6">
-            <Crest alt={site.cover.portraitAlt} src={classPortrait.src} />
+          <header className="fixed left-0 top-0 z-50 p-4 md:p-6">
             <LanguageToggle language={language} onToggle={toggleLanguage} />
           </header>
 
