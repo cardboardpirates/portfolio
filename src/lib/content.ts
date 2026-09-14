@@ -9,6 +9,7 @@ const GITHUB_URL = "https://github.com/cardboardpirates";
 const EMAIL = "visnardi.pedro@gmail.com";
 const INSTAGRAM_URL = "https://www.instagram.com/opedrodemana/";
 const YOUTUBE_URL = "https://www.youtube.com/@PedroDeMana";
+const NELSON_ARONE_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/nelson-arone.jpg`;
 
 const en: SiteContent = {
   meta: {
@@ -158,6 +159,14 @@ const en: SiteContent = {
       "A living wall of the work. Drift by, or hover a tile to bring it forward.",
     placeholderNote:
       "Real project tiles are on their way. The wall below is showing sample images until then.",
+    featuredTile: {
+      id: "nelson-arone",
+      image: NELSON_ARONE_IMAGE,
+      title: "Nelson Arone, Psychologist",
+      description:
+        "Institutional website for a clinical psychology practice, with session booking.",
+      href: "https://psicologonelsonarone.com.br",
+    },
   },
   contact: {
     eyebrow: "Send a Raven",
@@ -329,6 +338,14 @@ const pt: SiteContent = {
       "Um mural vivo do trabalho. Deixe passar, ou passe o mouse num azulejo pra trazê-lo pra frente.",
     placeholderNote:
       "Os azulejos com projetos reais estão a caminho. O mural abaixo mostra imagens de exemplo até lá.",
+    featuredTile: {
+      id: "nelson-arone",
+      image: NELSON_ARONE_IMAGE,
+      title: "Nelson Arone, Psicólogo",
+      description:
+        "Site institucional para consultório de psicologia clínica, com agendamento de sessões.",
+      href: "https://psicologonelsonarone.com.br",
+    },
   },
   contact: {
     eyebrow: "Enviar um Corvo",

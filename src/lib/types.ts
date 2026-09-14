@@ -137,6 +137,9 @@ export interface SiteContent {
     // honesto do card de "missão selada" do Diário de Missões.
     placeholderNote: string;
     tiles?: PortfolioTileContent[];
+    // Projeto real já disponível, exibido no lugar de um dos azulejos de
+    // exemplo enquanto os demais ainda são placeholders.
+    featuredTile?: PortfolioTileContent;
   };
   contact: {
     eyebrow: string;
