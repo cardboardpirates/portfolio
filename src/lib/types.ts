@@ -76,6 +76,12 @@ export interface PortfolioTileContent {
   href?: string;
 }
 
+// Um azulejo de projeto real, com a posição (0-based) do azulejo de exemplo
+// que ele substitui na parede.
+export interface FeaturedPortfolioTileContent extends PortfolioTileContent {
+  slot: number;
+}
+
 // SiteContent descreve TODO o texto do site. Cada página do livreto de ficha
 // (cover, log, portfolio, contact) tem seu próprio sub-objeto de textos.
 export interface SiteContent {
@@ -137,9 +143,9 @@ export interface SiteContent {
     // honesto do card de "missão selada" do Diário de Missões.
     placeholderNote: string;
     tiles?: PortfolioTileContent[];
-    // Projeto real já disponível, exibido no lugar de um dos azulejos de
+    // Projetos reais já disponíveis, exibidos no lugar de alguns azulejos de
     // exemplo enquanto os demais ainda são placeholders.
-    featuredTile?: PortfolioTileContent;
+    featuredTiles?: FeaturedPortfolioTileContent[];
   };
   contact: {
     eyebrow: string;

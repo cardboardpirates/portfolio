@@ -57,9 +57,12 @@ export function PortfolioPage({ content }: PortfolioPageProps) {
   const tiles =
     portfolio.tiles && portfolio.tiles.length > 0
       ? portfolio.tiles
-      : portfolio.featuredTile
-        ? PLACEHOLDER_TILES.map((tile, index) =>
-            index === 5 ? portfolio.featuredTile! : tile,
+      : portfolio.featuredTiles && portfolio.featuredTiles.length > 0
+        ? PLACEHOLDER_TILES.map(
+            (tile, index) =>
+              portfolio.featuredTiles!.find(
+                (featured) => featured.slot === index,
+              ) ?? tile,
           )
         : PLACEHOLDER_TILES;
 
