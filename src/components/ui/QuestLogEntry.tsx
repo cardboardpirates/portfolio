@@ -34,7 +34,7 @@ export function QuestLogEntry({ quest, activeLabel }: QuestLogEntryProps) {
       <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
         {quest.role}
         {quest.location && (
-          <span className="inline-flex items-center gap-1 text-muted/70">
+          <span className="inline-flex items-center gap-1 text-muted">
             <MapPin size={11} />
             {quest.location}
           </span>

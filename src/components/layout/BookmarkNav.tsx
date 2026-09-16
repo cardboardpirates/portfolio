@@ -87,7 +87,7 @@ export function BookmarkNav({
           })}
         </div>
 
-        <span className="text-[0.6rem] text-muted/70">{copyright}</span>
+        <span className="text-[0.6rem] text-muted">{copyright}</span>
       </div>
     </nav>
   );

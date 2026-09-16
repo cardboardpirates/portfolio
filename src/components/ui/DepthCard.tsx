@@ -112,7 +112,11 @@ export function DepthCard({
           draggable={false}
           className="h-full w-full object-cover"
         />
-        <span className="absolute inset-0 bg-gradient-to-t from-bg/90 via-bg/30 to-transparent" />
+        {/* from/via mais opacos que o "natural" pra manter o título e a
+            descrição legíveis mesmo sobre um projeto com imagem clara (ex:
+            os rótulos de mel do Melipolinário) — o degradê não pode
+            depender de quão escura a imagem de cada card específico é. */}
+        <span className="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/70 to-transparent" />
       </span>
       <motion.span
         aria-hidden="true"
