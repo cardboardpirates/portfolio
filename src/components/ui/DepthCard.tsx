@@ -166,7 +166,10 @@ export function DepthCard({
   const sharedProps = {
     "data-depth-card-id": id,
     "aria-label": title ?? "Portfolio item",
-    className: `relative aspect-[4/3] w-full overflow-visible rounded-md border border-stroke bg-surface/80 ${className}`,
+    // text-left: sem isso, os azulejos sem "href" (que viram <button>, não
+    // <a>) herdam o text-align:center do estilo padrão do navegador pra
+    // botões, desalinhando o título/descrição dos demais azulejos.
+    className: `relative aspect-[4/3] w-full overflow-visible rounded-md border border-stroke bg-surface/80 text-left ${className}`,
     style: {
       rotateX: interactive ? rotateX : 0,
       rotateY: interactive ? rotateY : 0,

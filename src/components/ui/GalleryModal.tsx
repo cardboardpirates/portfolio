@@ -44,7 +44,7 @@ export function GalleryModal({
     <AnimatePresence>
       <motion.div
         role="presentation"
-        className="fixed inset-0 z-[9999] flex justify-center overflow-y-auto bg-bg/95 px-4 py-10 backdrop-blur-md sm:px-6 sm:py-16"
+        className="fixed inset-0 z-[9999] overflow-y-auto bg-bg/95 backdrop-blur-md"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -55,14 +55,18 @@ export function GalleryModal({
           role="dialog"
           aria-modal="true"
           aria-label={title ?? "Project gallery"}
-          className="flex h-fit w-full max-w-3xl flex-col gap-6"
+          className="mx-auto flex w-full max-w-3xl flex-col"
           initial={{ opacity: 0, y: 16, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           onClick={(event) => event.stopPropagation()}
         >
-          <div className="sticky top-0 z-10 -mx-4 flex items-start justify-between gap-4 bg-bg/95 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
+          {/* "top-0" gruda o cabeçalho na borda real da tela: por isso ele
+              carrega o próprio padding em vez de herdar o do container
+              rolável (esse padding empurraria o ponto de "grude" pra baixo
+              junto, e o cabeçalho nunca chegaria no topo de fato). */}
+          <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-stroke bg-bg/95 px-4 py-3 backdrop-blur-md sm:px-6">
             <div className="flex flex-col gap-1">
               {title && (
                 <h2 className="font-display text-2xl text-text-primary md:text-3xl">
@@ -84,7 +88,7 @@ export function GalleryModal({
             </button>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
             {images.map((image, index) => (
               <div
                 key={image}
