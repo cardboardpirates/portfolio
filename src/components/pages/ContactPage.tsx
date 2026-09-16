@@ -8,8 +8,10 @@ interface ContactPageProps {
   content: SiteContent;
 }
 
-// Página III: "Enviar um corvo". Status/redes sociais/copyright saíram
-// daqui e foram pro rodapé do menu lateral (BookmarkNav).
+// Página III: "Enviar um corvo". Eyebrow e título ficam centralizados no
+// topo; abaixo, o dado (só o visual, ver D20Roll) fica numa coluna à
+// esquerda e o texto (subtítulo, label do dado, resultado e CTA) numa
+// coluna à direita, que reage ao "hasWon" quando o dado assenta.
 export function ContactPage({ content }: ContactPageProps) {
   const { contact, social } = content;
   const [hasWon, setHasWon] = useState(false);
@@ -17,8 +19,8 @@ export function ContactPage({ content }: ContactPageProps) {
     social.find((link) => link.href.startsWith("mailto:"))?.href ?? "#";
 
   return (
-    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col justify-center gap-16 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
-      <div className="flex flex-col items-center gap-6 text-center">
+    <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col justify-center gap-12 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
+      <div className="flex flex-col items-center gap-3 text-center">
         <div className="flex items-center gap-3">
           <Send size={13} className="text-muted" />
           <span className="text-xs uppercase tracking-[0.3em] text-muted">
@@ -28,27 +30,41 @@ export function ContactPage({ content }: ContactPageProps) {
         <h2 className="font-display text-4xl text-text-primary md:text-6xl">
           {contact.heading} <span>{contact.headingItalic}</span>
         </h2>
-        <p className="max-w-md text-sm text-muted md:text-base">
-          {contact.subtext}
-        </p>
+      </div>
 
-        <D20Roll
-          idleLabel={contact.diceLabel}
-          successLabel={contact.diceSuccessLabel}
-          successDetail={contact.diceSuccessDetail}
-          onSuccess={() => setHasWon(true)}
-        />
+      <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
+        <div className="flex justify-center">
+          <D20Roll idleLabel={contact.diceLabel} onSuccess={() => setHasWon(true)} />
+        </div>
 
-        {hasWon && (
-          <GlowLink
-            href={emailHref}
-            size="lg"
-            tone="purple"
-            className="animate-role-fade-in mt-2"
+        <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
+          <p className="max-w-md text-sm text-muted md:text-base">
+            {contact.subtext}
+          </p>
+          <span
+            key={hasWon ? "done" : "idle"}
+            className={`animate-role-fade-in font-display text-text-primary ${
+              hasWon ? "text-2xl md:text-3xl" : "text-lg"
+            }`}
           >
-            {contact.ctaLabel} <ExternalLink size={14} aria-hidden="true" />
-          </GlowLink>
-        )}
+            {hasWon ? contact.diceSuccessLabel : contact.diceLabel}
+          </span>
+          {hasWon && (
+            <p className="animate-role-fade-in max-w-[16rem] text-sm text-muted">
+              {contact.diceSuccessDetail}
+            </p>
+          )}
+          {hasWon && (
+            <GlowLink
+              href={emailHref}
+              size="lg"
+              tone="purple"
+              className="animate-role-fade-in mt-2"
+            >
+              {contact.ctaLabel} <ExternalLink size={14} aria-hidden="true" />
+            </GlowLink>
+          )}
+        </div>
       </div>
     </section>
   );

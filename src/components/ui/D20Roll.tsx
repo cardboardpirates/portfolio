@@ -1,8 +1,10 @@
 // Dado d20 3D interativo (Three.js/React Three Fiber) da página de Contato:
-// clicar rola o dado — sempre cai em 20 — e só depois disso o CTA de contato
-// aparece. Cada face ganha um número em texto SDF (@react-three/drei),
-// posicionado no centroide/normal da face de um icosaedro regular, em vez de
-// texturizar a malha (evita UV mapping manual por face).
+// clicar rola o dado — sempre cai em 20. Só o dado mora aqui; o texto
+// idle/sucesso e o CTA de contato ficam na coluna ao lado, na ContactPage,
+// que reage ao "onSuccess" abaixo. Cada face ganha um número em texto SDF
+// (@react-three/drei), posicionado no centroide/normal da face de um
+// icosaedro regular, em vez de texturizar a malha (evita UV mapping manual
+// por face).
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
@@ -332,17 +334,10 @@ function usePrefersReducedMotion(): boolean {
 
 interface D20RollProps {
   idleLabel: string;
-  successLabel: string;
-  successDetail: string;
   onSuccess: () => void;
 }
 
-export function D20Roll({
-  idleLabel,
-  successLabel,
-  successDetail,
-  onSuccess,
-}: D20RollProps) {
+export function D20Roll({ idleLabel, onSuccess }: D20RollProps) {
   const [phase, setPhase] = useState<RollPhase>("idle");
   const [flashPulse, setFlashPulse] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
@@ -360,44 +355,29 @@ export function D20Roll({
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div
-        className={`relative h-56 w-56 rounded-full transition-shadow duration-300 ${
-          flashPulse ? "shadow-glow-amber" : ""
-        }`}
+    <div
+      className={`relative h-56 w-56 rounded-full transition-shadow duration-300 ${
+        flashPulse ? "shadow-glow-amber" : ""
+      }`}
+    >
+      <Canvas
+        className="pointer-events-none"
+        camera={{ position: [0, 1.2, 3.4], fov: 35 }}
+        gl={{ alpha: true, antialias: true }}
       >
-        <Canvas
-          className="pointer-events-none"
-          camera={{ position: [0, 1.2, 3.4], fov: 35 }}
-          gl={{ alpha: true, antialias: true }}
-        >
-          <ambientLight intensity={0.5} />
-          <pointLight position={[2, 2, 2]} intensity={35} color="#c084fc" />
-          <pointLight position={[-2, 1, 1.5]} intensity={25} color="#38bdf8" />
-          <pointLight position={[0, -2, 1.5]} intensity={18} color="#fbbf24" />
-          <Die phase={phase} reduceMotion={reduceMotion} onSettled={handleSettled} />
-        </Canvas>
-        <button
-          type="button"
-          onClick={handleRoll}
-          disabled={phase === "rolling"}
-          aria-label={idleLabel}
-          className="absolute inset-0 rounded-full disabled:cursor-wait"
-        />
-      </div>
-      <span
-        key={phase === "done" ? "done" : "idle"}
-        className={`animate-role-fade-in text-center font-display text-text-primary ${
-          phase === "done" ? "text-2xl md:text-3xl" : "text-lg"
-        }`}
-      >
-        {phase === "done" ? successLabel : idleLabel}
-      </span>
-      {phase === "done" && (
-        <p className="animate-role-fade-in max-w-[16rem] text-center text-sm text-muted">
-          {successDetail}
-        </p>
-      )}
+        <ambientLight intensity={0.5} />
+        <pointLight position={[2, 2, 2]} intensity={35} color="#c084fc" />
+        <pointLight position={[-2, 1, 1.5]} intensity={25} color="#38bdf8" />
+        <pointLight position={[0, -2, 1.5]} intensity={18} color="#fbbf24" />
+        <Die phase={phase} reduceMotion={reduceMotion} onSettled={handleSettled} />
+      </Canvas>
+      <button
+        type="button"
+        onClick={handleRoll}
+        disabled={phase === "rolling"}
+        aria-label={idleLabel}
+        className="absolute inset-0 rounded-full disabled:cursor-wait"
+      />
     </div>
   );
 }
