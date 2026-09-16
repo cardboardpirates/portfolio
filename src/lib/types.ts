@@ -68,18 +68,16 @@ export interface TrainingEntryContent {
 }
 
 // Um "azulejo" da parede de portfólio (imagem + título opcional + link opcional).
+// Quando "gallery" está presente, o clique no azulejo não navega pro "href"
+// (que fica de fora nesse caso); em vez disso abre um modal empilhando essas
+// imagens, uma embaixo da outra, pra projetos sem site próprio pra linkar.
 export interface PortfolioTileContent {
   id: string;
   image: string;
   title?: string;
   description?: string;
   href?: string;
-}
-
-// Um azulejo de projeto real, com a posição (0-based) do azulejo de exemplo
-// que ele substitui na parede.
-export interface FeaturedPortfolioTileContent extends PortfolioTileContent {
-  slot: number;
+  gallery?: string[];
 }
 
 // SiteContent descreve TODO o texto do site. Cada página do livreto de ficha
@@ -143,9 +141,6 @@ export interface SiteContent {
     // honesto do card de "missão selada" do Diário de Missões.
     placeholderNote: string;
     tiles?: PortfolioTileContent[];
-    // Projetos reais já disponíveis, exibidos no lugar de alguns azulejos de
-    // exemplo enquanto os demais ainda são placeholders.
-    featuredTiles?: FeaturedPortfolioTileContent[];
   };
   contact: {
     eyebrow: string;

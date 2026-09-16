@@ -12,6 +12,18 @@ const YOUTUBE_URL = "https://www.youtube.com/@PedroDeMana";
 const NELSON_ARONE_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/nelson-arone.jpg`;
 const POCKET_TRAP_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/pocket-trap.jpg`;
 const POCKET_TRAP_URL = "https://cardboardpirates.github.io/pocket-trap/";
+const ELECTROLUX_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/electrolux.jpg`;
+const TIGRE_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/tigre.jpg`;
+const MELIPONARIO_BORA_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/meliponario-bora.png`;
+const MELIPONARIO_BUGIA_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/meliponario-bugia.png`;
+const MELIPONARIO_JATAI_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/meliponario-jatai.png`;
+const MELIPONARIO_MOMBUCAO_IMAGE = `${import.meta.env.BASE_URL}images/trabalhos/meliponario-mombucao.png`;
+const MELIPONARIO_GALLERY = [
+  MELIPONARIO_BORA_IMAGE,
+  MELIPONARIO_BUGIA_IMAGE,
+  MELIPONARIO_JATAI_IMAGE,
+  MELIPONARIO_MOMBUCAO_IMAGE,
+];
 
 const en: SiteContent = {
   meta: {
@@ -161,9 +173,8 @@ const en: SiteContent = {
       "A living wall of the work. Drift by, or hover a tile to bring it forward.",
     placeholderNote:
       "Real project tiles are on their way. The wall below is showing sample images until then.",
-    featuredTiles: [
+    tiles: [
       {
-        slot: 0,
         id: "pocket-trap",
         image: POCKET_TRAP_IMAGE,
         title: "Pocket Trap",
@@ -172,7 +183,29 @@ const en: SiteContent = {
         href: POCKET_TRAP_URL,
       },
       {
-        slot: 5,
+        id: "electrolux",
+        image: ELECTROLUX_IMAGE,
+        title: "Electrolux Instala",
+        description:
+          "Case study for a gamified training campaign built for Electrolux's installer network.",
+        gallery: [ELECTROLUX_IMAGE],
+      },
+      {
+        id: "tigre",
+        image: TIGRE_IMAGE,
+        title: "Grupo Tigre",
+        description:
+          "Case study for an internal culture campaign run across 7 countries and 3 languages.",
+        gallery: [TIGRE_IMAGE],
+      },
+      {
+        id: "meliponario",
+        image: MELIPONARIO_BORA_IMAGE,
+        title: "Melipolinário Costa do Ribeiro",
+        description: "Honey jar label designs for a native stingless-bee apiary.",
+        gallery: MELIPONARIO_GALLERY,
+      },
+      {
         id: "nelson-arone",
         image: NELSON_ARONE_IMAGE,
         title: "Nelson Arone, Psychologist",
@@ -352,9 +385,8 @@ const pt: SiteContent = {
       "Um mural vivo do trabalho. Deixe passar, ou passe o mouse num azulejo pra trazê-lo pra frente.",
     placeholderNote:
       "Os azulejos com projetos reais estão a caminho. O mural abaixo mostra imagens de exemplo até lá.",
-    featuredTiles: [
+    tiles: [
       {
-        slot: 0,
         id: "pocket-trap",
         image: POCKET_TRAP_IMAGE,
         title: "Pocket Trap",
@@ -363,7 +395,29 @@ const pt: SiteContent = {
         href: POCKET_TRAP_URL,
       },
       {
-        slot: 5,
+        id: "electrolux",
+        image: ELECTROLUX_IMAGE,
+        title: "Electrolux Instala",
+        description:
+          "Case de uma campanha gamificada de treinamento para a rede de instaladores da Electrolux.",
+        gallery: [ELECTROLUX_IMAGE],
+      },
+      {
+        id: "tigre",
+        image: TIGRE_IMAGE,
+        title: "Grupo Tigre",
+        description:
+          "Case de uma campanha interna de cultura organizacional, rodada em 7 países e 3 idiomas.",
+        gallery: [TIGRE_IMAGE],
+      },
+      {
+        id: "meliponario",
+        image: MELIPONARIO_BORA_IMAGE,
+        title: "Melipolinário Costa do Ribeiro",
+        description: "Rótulos de potes de mel para um meliponário de abelhas nativas sem ferrão.",
+        gallery: MELIPONARIO_GALLERY,
+      },
+      {
         id: "nelson-arone",
         image: NELSON_ARONE_IMAGE,
         title: "Nelson Arone, Psicólogo",
