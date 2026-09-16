@@ -124,6 +124,7 @@ const en: SiteContent = {
         guild: "Visie Padrões Web",
         role: "Frontend Developer Pleno",
         period: "2018 - 2019",
+        location: "São Paulo, Brazil",
         description: "Frontend development for corporate web projects.",
         status: "completed",
       },
@@ -132,6 +133,7 @@ const en: SiteContent = {
         guild: "Elo Criativo Design & Web",
         role: "Frontend Developer & Designer Gráfico",
         period: "2013 - 2018",
+        location: "São Paulo, Brazil",
         description:
           "Frontend development and graphic design for corporate web projects.",
         status: "completed",
@@ -336,6 +338,7 @@ const pt: SiteContent = {
         guild: "Visie Padrões Web",
         role: "Frontend Developer Pleno",
         period: "2018 - 2019",
+        location: "São Paulo, Brasil",
         description: "Desenvolvimento frontend para projetos corporativos.",
         status: "completed",
       },
@@ -344,6 +347,7 @@ const pt: SiteContent = {
         guild: "Elo Criativo Design & Web",
         role: "Frontend Developer & Designer Gráfico",
         period: "2013 - 2018",
+        location: "São Paulo, Brasil",
         description:
           "Desenvolvimento frontend e design gráfico para projetos corporativos.",
         status: "completed",
