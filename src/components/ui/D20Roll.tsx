@@ -339,7 +339,6 @@ interface D20RollProps {
 
 export function D20Roll({ idleLabel, onSuccess }: D20RollProps) {
   const [phase, setPhase] = useState<RollPhase>("idle");
-  const [flashPulse, setFlashPulse] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
 
   const handleRoll = () => {
@@ -349,17 +348,11 @@ export function D20Roll({ idleLabel, onSuccess }: D20RollProps) {
 
   const handleSettled = () => {
     setPhase("done");
-    setFlashPulse(true);
     onSuccess();
-    setTimeout(() => setFlashPulse(false), 550);
   };
 
   return (
-    <div
-      className={`relative h-[245px] w-[245px] rounded-full transition-shadow duration-300 md:h-[326px] md:w-[326px] ${
-        flashPulse ? "shadow-glow-amber" : ""
-      }`}
-    >
+    <div className="relative h-[245px] w-[245px] md:h-[326px] md:w-[326px]">
       <Canvas
         className="pointer-events-none"
         camera={{ position: [0, 1.2, 3.4], fov: 35 }}

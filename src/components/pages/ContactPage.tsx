@@ -13,12 +13,20 @@ interface ContactPageProps {
 // topo, fora do bloco; abaixo, toda a interação do dado mora dentro de um
 // SheetPanel (a mesma moldura do diário de missões): o dado (só o visual,
 // ver D20Roll) fica numa coluna à esquerda e o texto (subtítulo, label do dado, resultado e CTA) numa
-// coluna à direita, que reage ao "hasWon" quando o dado assenta.
+// coluna à direita, que reage ao "hasWon" quando o dado assenta. O brilho
+// âmbar do "crítico" pulsa na caixa inteira, não só ao redor do dado.
 export function ContactPage({ content }: ContactPageProps) {
   const { contact, social } = content;
   const [hasWon, setHasWon] = useState(false);
+  const [flashPulse, setFlashPulse] = useState(false);
   const emailHref =
     social.find((link) => link.href.startsWith("mailto:"))?.href ?? "#";
+
+  const handleSuccess = () => {
+    setHasWon(true);
+    setFlashPulse(true);
+    setTimeout(() => setFlashPulse(false), 550);
+  };
 
   return (
     <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col justify-center gap-12 px-6 pb-24 pt-24 md:px-10 md:pb-16 md:pt-28 md:pr-28 lg:px-16 lg:pr-28">
@@ -34,10 +42,15 @@ export function ContactPage({ content }: ContactPageProps) {
         </h2>
       </div>
 
-      <SheetPanel tone="neutral" className="p-6 md:p-10">
+      <SheetPanel
+        tone="neutral"
+        className={`p-6 transition-shadow duration-300 md:p-10 ${
+          flashPulse ? "shadow-glow-amber" : ""
+        }`}
+      >
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
           <div className="flex justify-center">
-            <D20Roll idleLabel={contact.diceLabel} onSuccess={() => setHasWon(true)} />
+            <D20Roll idleLabel={contact.diceLabel} onSuccess={handleSuccess} />
           </div>
   
           <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
