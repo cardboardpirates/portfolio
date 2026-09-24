@@ -356,7 +356,7 @@ export function D20Roll({ idleLabel, onSuccess }: D20RollProps) {
 
   return (
     <div
-      className={`relative h-72 w-72 rounded-full transition-shadow duration-300 md:h-96 md:w-96 ${
+      className={`relative h-[245px] w-[245px] rounded-full transition-shadow duration-300 md:h-[326px] md:w-[326px] ${
         flashPulse ? "shadow-glow-amber" : ""
       }`}
     >

@@ -55,12 +55,12 @@ export function QuestLogPage({ content }: QuestLogPageProps) {
                 // Formação incompleta é "dessaturada": sem cor de destaque
                 // nenhuma (nem o amber do resto do site), pra ler como um
                 // bloco fora de foco na ficha em vez de só mais uma entrada
-                // de treino comum. Só o filtro grayscale, sem opacity: uma
-                // opacidade reduzida no container inteiro derrubava o
-                // contraste do texto (que já é text-muted) pra ~2.4:1,
-                // abaixo do AA — grayscale preserva a luminância do texto.
+                // de treino comum. A opacidade reduzida é intencional, pra
+                // ler como um bloco "desativado": isso derruba o contraste
+                // do texto abaixo do AA, uma exceção consciente por ser uma
+                // entrada secundária que não pede leitura atenta.
                 className={`flex flex-col gap-1 p-5 pt-7 ${
-                  isIncomplete ? "grayscale" : ""
+                  isIncomplete ? "opacity-50 grayscale" : ""
                 }`}
               >
                 <div className="flex items-center gap-2">
