@@ -53,7 +53,7 @@ export function ContactPage({ content }: ContactPageProps) {
               {hasWon ? contact.diceSuccessLabel : contact.diceLabel}
             </span>
             {hasWon && (
-              <p className="animate-role-fade-in max-w-[16rem] text-sm text-muted">
+              <p className="animate-role-fade-in max-w-md text-muted">
                 {contact.diceSuccessDetail}
               </p>
             )}
